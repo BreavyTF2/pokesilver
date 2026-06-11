@@ -1248,7 +1248,7 @@ ROMX bank #1:
 	         $4012 = PlaceWaitingText.notinbattle
 	         $4017 = PlaceWaitingText.proceed
 	         $4025 = PlaceWaitingText.Waiting
-	         $4031 = DummyPredef1
+	         $4031 = DebugMenu
 	         $4032 = WriteOAMDMACodeToHRAM
 	         $4039 = WriteOAMDMACodeToHRAM.copy
 	         $4040 = OAMDMACode
@@ -2125,7 +2125,7 @@ ROMX bank #2:
 	         $4b3b = GetPredefPointer
 	         $4b5b = PredefPointers
 	         $4b5b = LearnMovePredef
-	         $4b5e = DummyPredef1Predef
+	         $4b5e = DebugMenuPredef
 	         $4b61 = HealPartyPredef
 	         $4b64 = SmallFarFlagActionPredef
 	         $4b67 = ComputeHPBarPixelsPredef
@@ -2182,7 +2182,7 @@ ROMX bank #2:
 	         $4c00 = PlayBattleAnimPredef
 	         $4c03 = DummyPredef38Predef
 	         $4c06 = DummyPredef39Predef
-	         $4c09 = DummyPredef3APredef
+	         $4c09 = FightDebugMenuPredef
 	         $4c0c = PartyMonItemNamePredef
 	         $4c0f = GetMonFrontpicPredef
 	         $4c12 = GetMonBackpicPredef
@@ -29007,7 +29007,7 @@ ROMX bank #62:
 	         $4bd2 = HPExpBarBorderGFX
 	         $4c02 = ExpBarGFX
 	         $4c92 = TownMapGFX
-	         $4e22 = UnusedWeekdayKanjiGFX
+	         $4e22 = WeekdayKanjiGFX
 	         $4ea2 = PokegearPhoneIconGFX
 	         $4eb2 = UnusedBoldFontGFX
 	         $5182 = TextboxSpaceGFX
@@ -29156,9 +29156,7 @@ ROMX bank #62:
 
 ROMX bank #63:
 	SECTION: $4000-$6047 ($2048 bytes) ["bank3F"]
-	         $4000 = DummyPredef3A_DummyData
-	         $4001 = DummyPredef3A
-	         $4002 = DummyPredef3A_DummyFunction
+	         $4001 = FightDebugMenu
 	         $4003 = _AnimateTileset
 	         $401e = Tileset0Anim
 	         $401e = TilesetJohtoModernAnim
@@ -29255,7 +29253,7 @@ ROMX bank #63:
 	         $48ed = WhirlpoolTiles2
 	         $492d = WhirlpoolTiles3
 	         $496d = WhirlpoolTiles4
-	         $49ad = TilesetAnims_DummyFunction
+	         $49ad = Debug_UpdateToolgear
 	         $49ae = NPCTrade
 	         $4a09 = NPCTrade.done
 	         $4a0d = NPCTrade.TradeAnimation
@@ -41358,8 +41356,8 @@ WRAMX bank #1:
 	         $d0c7 = wSelectedDecoration
 	         $d0c7 = wSwitchMonFrom
 	         $d0c7 = wBottomRightYCoord
-	         $d0c8 = wBottomRightXCoord
 	         $d0c8 = wRestartClockDay
+	         $d0c8 = wBottomRightXCoord
 	         $d0c8 = wEvolutionCanceled
 	         $d0c8 = wOtherDecoration
 	         $d0c9 = wCurHPAnimNewHP

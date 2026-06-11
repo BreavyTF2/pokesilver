@@ -1208,7 +1208,7 @@
 01:4012 PlaceWaitingText.notinbattle
 01:4017 PlaceWaitingText.proceed
 01:4025 PlaceWaitingText.Waiting
-01:4031 DummyPredef1
+01:4031 DebugMenu
 01:4032 WriteOAMDMACodeToHRAM
 01:4039 WriteOAMDMACodeToHRAM.copy
 01:4040 OAMDMACode
@@ -2081,7 +2081,7 @@
 02:4b3b GetPredefPointer
 02:4b5b LearnMovePredef
 02:4b5b PredefPointers
-02:4b5e DummyPredef1Predef
+02:4b5e DebugMenuPredef
 02:4b61 HealPartyPredef
 02:4b64 SmallFarFlagActionPredef
 02:4b67 ComputeHPBarPixelsPredef
@@ -2138,7 +2138,7 @@
 02:4c00 PlayBattleAnimPredef
 02:4c03 DummyPredef38Predef
 02:4c06 DummyPredef39Predef
-02:4c09 DummyPredef3APredef
+02:4c09 FightDebugMenuPredef
 02:4c0c PartyMonItemNamePredef
 02:4c0f GetMonFrontpicPredef
 02:4c12 GetMonBackpicPredef
@@ -28641,7 +28641,7 @@
 3e:4bd2 HPExpBarBorderGFX
 3e:4c02 ExpBarGFX
 3e:4c92 TownMapGFX
-3e:4e22 UnusedWeekdayKanjiGFX
+3e:4e22 WeekdayKanjiGFX
 3e:4ea2 PokegearPhoneIconGFX
 3e:4eb2 UnusedBoldFontGFX
 3e:5182 TextboxSpaceGFX
@@ -28783,9 +28783,7 @@
 3e:7f3c DoBadgeTypeBoosts.Update
 3e:7f44 DoBadgeTypeBoosts.done
 3e:7f47 BadgeTypeBoosts
-3f:4000 DummyPredef3A_DummyData
-3f:4001 DummyPredef3A
-3f:4002 DummyPredef3A_DummyFunction
+3f:4001 FightDebugMenu
 3f:4003 _AnimateTileset
 3f:401e Tileset0Anim
 3f:401e TilesetForestAnim
@@ -28882,7 +28880,7 @@
 3f:48ed WhirlpoolTiles2
 3f:492d WhirlpoolTiles3
 3f:496d WhirlpoolTiles4
-3f:49ad TilesetAnims_DummyFunction
+3f:49ad Debug_UpdateToolgear
 3f:49ae NPCTrade
 3f:4a09 NPCTrade.done
 3f:4a0d NPCTrade.TradeAnimation
