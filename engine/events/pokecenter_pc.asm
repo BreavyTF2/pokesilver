@@ -241,9 +241,11 @@ _PlayersPC:
 	ret
 
 .PlayersPC:
+IF DEF(_REV0) || DEF(_REV1)
 	xor a
 	ld [wPCItemsCursor], a
 	ld [wPCItemsScrollPosition], a
+ENDC
 	ld hl, PlayersPCMenuData
 	call LoadMenuHeader
 .loop

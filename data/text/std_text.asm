@@ -321,7 +321,11 @@ CoinVendor_NotEnoughMoneyText:
 
 CoinVendor_CoinCaseFullText:
 	text "おっと<⋯>！"
+IF DEF(_PROTO)
+	line "コインケース<GA>まんたん　だよ！"
+ELIF DEF(_REV0) || DEF(_REV1)
 	line "コインケースから　あふれちゃうよ！"
+ENDC
 	done
 
 CoinVendor_CancelText:

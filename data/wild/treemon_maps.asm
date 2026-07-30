@@ -4,14 +4,23 @@ MACRO treemon_map
 ENDM
 
 TreeMonMaps:
+IF DEF(_PROTO)
+	treemon_map ROUTE_26,                  TREEMON_SET_NONE
+	treemon_map ROUTE_27,                  TREEMON_SET_NONE
+ELIF DEF(_REV0) || DEF(_REV1)
 	treemon_map ROUTE_26,                  TREEMON_SET_FOREST
 	treemon_map ROUTE_27,                  TREEMON_SET_FOREST
+ENDC
 	treemon_map ROUTE_28,                  TREEMON_SET_NONE
 	treemon_map ROUTE_29,                  TREEMON_SET_CANYON
 	treemon_map ROUTE_30,                  TREEMON_SET_CANYON
 	treemon_map ROUTE_31,                  TREEMON_SET_CANYON
 	treemon_map ROUTE_32,                  TREEMON_SET_CANYON
+IF DEF(_PROTO)
+	treemon_map ROUTE_33,                  TREEMON_SET_NONE
+ELIF DEF(_REV0) || DEF(_REV1)
 	treemon_map ROUTE_33,                  TREEMON_SET_CANYON
+ENDC
 	treemon_map ROUTE_34,                  TREEMON_SET_FOREST
 	treemon_map ROUTE_35,                  TREEMON_SET_FOREST
 	treemon_map ROUTE_36,                  TREEMON_SET_FOREST
@@ -21,7 +30,11 @@ TreeMonMaps:
 	treemon_map ROUTE_40,                  TREEMON_SET_NONE
 	treemon_map ROUTE_41,                  TREEMON_SET_NONE
 	treemon_map ROUTE_42,                  TREEMON_SET_CANYON
+IF DEF(_PROTO)
+	treemon_map ROUTE_43,                  TREEMON_SET_NONE
+ELIF DEF(_REV0) || DEF(_REV1)
 	treemon_map ROUTE_43,                  TREEMON_SET_CANYON
+ENDC
 	treemon_map ROUTE_44,                  TREEMON_SET_CANYON
 	treemon_map ROUTE_45,                  TREEMON_SET_CANYON
 	treemon_map ROUTE_46,                  TREEMON_SET_CANYON

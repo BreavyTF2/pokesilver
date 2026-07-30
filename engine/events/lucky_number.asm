@@ -31,7 +31,11 @@ CheckForLuckyNumberWinners:
 	ld a, [bc]
 	inc bc
 	cp EGG
+IF DEF(_PROTO)
+	call z, .SkipOpenBoxMon
+ELIF DEF(_REV0) || DEF(_REV1)
 	jr z, .SkipOpenBoxMon
+ENDC
 	call .CompareLuckyNumberToMonID
 	jr nc, .SkipOpenBoxMon
 	ld a, TRUE

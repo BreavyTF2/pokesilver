@@ -911,6 +911,13 @@ DEF NUM_TITLESCREENOPTIONS EQU const_value
 IntroSequence:
 	callfar SplashScreen
 	jr c, StartTitleScreen
+IF DEF(_PROTO)
+	ld a, [wBetaTitleSequenceOpeningType]
+	and a
+	jr z, .dummy
+; code was probably dummied out here
+.dummy
+ENDC
 	callfar GoldSilverIntro
 
 	; fallthrough

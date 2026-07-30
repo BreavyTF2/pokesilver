@@ -444,6 +444,10 @@ MailboxPC:
 	ld hl, wNumItems
 	call ReceiveItem
 	jr c, .put_in_bag
+IF DEF (_PROTO)
+	ld hl, wNumItems
+	call TossItem
+ENDC
 	ld hl, .MailPackFullText
 	jp MenuTextboxBackup
 

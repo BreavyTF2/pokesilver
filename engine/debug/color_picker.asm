@@ -1055,8 +1055,38 @@ INCBIN "gfx/debug/color_test.2bpp"
 
 TilesetColorPicker: ; unreferenced
 ; A debug menu to test tileset palettes at runtime.
-; dummied out
+; dummied out in retail
+IF DEF(_PROTO)
+	ldh a, [hCGB]
+	and a
+	ret z
+	ldh a, [hInMenu]
+	push af
+	ld a, $1
+	ldh [hInMenu], a
+	call .InitMenu
+.loop
+	call JoyTextDelay
+	ldh a, [hJoyLast]
+	and PAD_START
+	jr nz, .quit
+	call DebugColorMain2
+	ldh a, [hWY]
+	cp $90
+	call nz, DebugTileset_PlaceCursor
+	call DelayFrame
+	jr .loop
+.quit
+	ld a, $90
+	ldh [hWY], a
+	pop af
+	ldh [hInMenu], a
 	ret
+
+.InitMenu
+ELIF DEF(_REV0) || DEF(_REV1)
+	ret
+ENDC
 
 	xor a
 	ld [wJumptableIndex], a
@@ -1161,7 +1191,7 @@ DebugTileset_LoadPalettes:
 	call DebugColor_CalculateRGB
 	ret
 
-DebugColorMain2: ; unreferenced
+DebugColorMain2:
 	ld hl, hJoyLast
 	ld a, [hl]
 	and PAD_SELECT

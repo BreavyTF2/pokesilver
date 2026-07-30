@@ -258,5 +258,9 @@ ItemNames::
 	li "カビチュウ"
 	li "カビチュウ"
 	li "カビチュウ"
+IF DEF(_PROTO)
+	assert_list_length $100 -1
+ELIF DEF(_REV0) || DEF(_REV1)
 	li "？"
 	assert_list_length $100
+ENDC

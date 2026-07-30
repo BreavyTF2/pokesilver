@@ -58,7 +58,11 @@ ItemEffects:
 	dw SuperRepelEffect    ; SUPER_REPEL
 	dw MaxRepelEffect      ; MAX_REPEL
 	dw DireHitEffect       ; DIRE_HIT
+IF DEF(_PROTO)
+	dw BitterBerryEffect   ; ITEM_2D
+ELIF DEF(_REV0) || DEF(_REV1)
 	dw NoEffect            ; ITEM_2D
+ENDC
 	dw RestoreHPEffect     ; FRESH_WATER
 	dw RestoreHPEffect     ; SODA_POP
 	dw RestoreHPEffect     ; LEMONADE
@@ -614,6 +618,9 @@ PokeBallEffect:
 
 	ld a, [sBoxCount]
 	cp MONS_PER_BOX
+IF DEF(_PROTO)
+	call CloseSRAM
+ENDC
 	jr nz, .BoxNotFullYet
 	ld hl, wBattleResult
 	set BATTLERESULT_BOX_FULL, [hl]
@@ -625,7 +632,9 @@ PokeBallEffect:
 	ld a, FRIEND_BALL_HAPPINESS
 	ld [sBoxMon1Happiness], a
 .SkipBoxMonFriendBall:
+IF DEF(_REV0) || DEF(_REV1)
 	call CloseSRAM
+ENDC
 
 	ld hl, AskGiveNicknameText
 	call PrintText
@@ -1597,6 +1606,9 @@ BitterBerryEffect:
 
 	ld hl, ConfusedNoMoreText
 	call StdBattleTextbox
+IF DEF(_PROTO)
+	call UseDisposableItem
+ENDC
 
 	ld a, 0
 

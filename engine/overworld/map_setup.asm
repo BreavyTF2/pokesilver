@@ -58,6 +58,34 @@ ReadMapSetupScript:
 	pop hl
 	jr .loop
 
+IF DEF(_PROTO)
+FarCall_hl_copy: ; unreferenced
+	ld [wTempBank], a
+	ldh a, [hROMBank]
+	push af
+	ld a, [wTempBank]
+	rst Bankswitch
+	call .jp_hl
+
+	ld a, b
+	ld [wFarCallBC], a
+	ld a, c
+	ld [wFarCallBC + 1], a
+
+	pop bc
+	ld a, b
+	rst Bankswitch
+	ld a, [wFarCallBC]
+	ld b, a
+	ld a, [wFarCallBC + 1]
+	ld c, a
+	ret
+
+.jp_hl:
+	jp hl
+
+ENDC
+
 INCLUDE "data/maps/setup_script_pointers.asm"
 
 EnableTextAcceleration:
@@ -154,11 +182,13 @@ CheckUpdatePlayerSprite::
 .CheckSurfing:
 	call CheckOnWater
 	jr nz, .nope2
+IF DEF(_REV0) || DEF(_REV1)
 	ld a, [wPlayerState]
 	cp PLAYER_SURF
 	jr z, .is_surfing
 	cp PLAYER_SURF_PIKA
 	jr z, .is_surfing
+ENDC
 	ld a, PLAYER_SURF
 	ld [wPlayerState], a
 .is_surfing

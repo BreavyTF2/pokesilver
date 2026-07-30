@@ -1880,6 +1880,7 @@ DEF MOVE_MON_FROM_PARTY_F EQU 0
 DEF MOVE_MON_TO_PARTY_F   EQU 1
 
 MovePKMNWithoutMail_InsertMon:
+IF DEF(_REV0) || DEF(_REV1)
 	push hl
 	push de
 	push bc
@@ -1896,6 +1897,7 @@ MovePKMNWithoutMail_InsertMon:
 	pop bc
 	pop de
 	pop hl
+ENDC
 	ld a, [wCurBox]
 	push af
 	ld bc, 0
@@ -1922,6 +1924,15 @@ MovePKMNWithoutMail_InsertMon:
 	jp hl
 
 .dw_return
+IF DEF(_PROTO)
+	hlcoord 0, 14
+	lb bc, 2, 18
+	call Textbox
+	hlcoord 1, 16
+	ld de, .Saving_LeaveOn
+	call PlaceString
+	call WaitBGMap
+ENDC
 	pop af
 	ld e, a
 	farcall MoveMonWOMail_InsertMon_SaveGame
@@ -1953,11 +1964,13 @@ MovePKMNWithoutMail_InsertMon:
 
 .PartyToBox:
 	call .CopyFromParty
+IF DEF(_REV0) || DEF(_REV1)
 	ld a, $1
 	ld [wGameLogicPaused], a
 	farcall SaveGameData
 	xor a
 	ld [wGameLogicPaused], a
+ENDC
 	call .CopyToBox
 	ret
 
@@ -2180,10 +2193,18 @@ PCString_NoReleasingEGGS: db "タマゴを　にがすことは　できませ�
 
 _ChangeBox:
 	call LoadStandardMenuHeader
+IF DEF(_REV0) || DEF(_REV1)
 	call BillsPC_ClearTilemap
+ENDC
 .loop
 	xor a
 	ldh [hBGMapMode], a
+IF DEF(_PROTO)
+	hlcoord 0, 0
+	ld bc, SCREEN_AREA
+	ld a, '　'
+	call ByteFill
+ENDC
 	call BillsPC_PrintBoxName
 	call BillsPC_PlaceChooseABoxString
 	ld hl, _ChangeBox_MenuHeader
@@ -2193,6 +2214,10 @@ _ChangeBox:
 	hlcoord 0, 4
 	lb bc, 8, 9
 	call Textbox
+IF DEF(_PROTO)
+	ld a, $1
+	ldh [hBGMapMode], a
+ENDC
 	call ScrollingMenu
 	ld a, [wMenuJoypad]
 	cp PAD_B
@@ -2204,6 +2229,7 @@ _ChangeBox:
 	call CloseWindow
 	ret
 
+IF DEF(_REV0) || DEF(_REV1)
 BillsPC_ClearTilemap:
 	xor a
 	ldh [hBGMapMode], a
@@ -2212,6 +2238,7 @@ BillsPC_ClearTilemap:
 	ld a, '　'
 	call ByteFill
 	ret
+ENDC
 
 _ChangeBox_MenuHeader:
 	db MENU_BACKUP_TILES ; flags
@@ -2370,7 +2397,9 @@ BillsPC_ChangeBoxSubmenu:
 	dec a
 	ld c, a
 	farcall PrintPCBox
+IF DEF(_REV0) || DEF(_REV1)
 	call BillsPC_ClearTilemap
+ENDC
 	and a
 	ret
 
@@ -2395,7 +2424,9 @@ BillsPC_ChangeBoxSubmenu:
 	farcall NamingScreen
 	call ClearTilemap
 	call LoadStandardFont
+IF DEF(_REV0) || DEF(_REV1)
 	call LoadFontsBattleExtra
+ENDC
 	ld a, [wMenuSelection]
 	dec a
 	call GetBoxName

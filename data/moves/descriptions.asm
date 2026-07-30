@@ -253,6 +253,7 @@ MoveDescriptions::
 	dw WhirlpoolDescription
 	dw BeatUpDescription
 	assert_table_length NUM_ATTACKS
+IF DEF(_REV0) || DEF(_REV1)
 	dw MoveFCDescription
 	dw MoveFDDescription
 	dw MoveFEDescription
@@ -266,6 +267,7 @@ MoveFEDescription:
 MoveFFDescription:
 Move00Description:
 	db "？@"
+ENDC
 
 PoundDescription:
 	db   "てや　しっぽなど<WO>つかい"
@@ -301,7 +303,11 @@ IcePunchDescription:
 
 ThunderpunchDescription:
 	db   "でんげきをこめた　パンチで　<KOUGEKI>"
+IF DEF(_PROTO)
+	next "てき<WO>マヒさせることがある@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "てき<WO>まひさせることがある@"
+ENDC
 
 ScratchDescription:
 	db   "するどいツメ<WO>つかい"
@@ -401,7 +407,11 @@ TackleDescription:
 
 BodySlamDescription:
 	db   "からだごと　たおれこんで　<KOUGEKI>"
+IF DEF(_PROTO)
+	next "てき<WO>マヒさせることがある@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "てき<WO>まひさせることがある@"
+ENDC
 
 WrapDescription:
 	db   "２ー５ターンのあいだ　ながいからだや"
@@ -577,7 +587,11 @@ PoisonpowderDescription:
 
 StunSporeDescription:
 	db   "しびれる　こな<WO>ふりまき"
+IF DEF(_PROTO)
+	next "てき<WO>マヒさせてしまう@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "てき<WO>まひさせてしまう@"
+ENDC
 
 SleepPowderDescription:
 	db   "ねむくなる　こな<WO>ふりまき"
@@ -601,19 +615,35 @@ FireSpinDescription:
 
 ThundershockDescription:
 	db   "でんげき<WO>あびせて　<KOUGEKI>"
+IF DEF(_PROTO)
+	next "てき<WO>マヒさせることがある@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "てき<WO>まひさせることがある@"
+ENDC
 
 ThunderboltDescription:
 	db   "つよいでんげき<WO>あびせて　<KOUGEKI>"
+IF DEF(_PROTO)
+	next "てき<WO>マヒさせることがある@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "てき<WO>まひさせることがある@"
+ENDC
 
 ThunderWaveDescription:
 	db   "よわいでんげき<WO>てき<NI>ぶつけて"
+IF DEF(_PROTO)
+	next "マヒさせてしまう@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "まひさせてしまう@"
+ENDC
 
 ThunderDescription:
 	db   "てき<NI>むか<TTE>　かみなり<WO>おとす"
+IF DEF(_PROTO)
+	next "マヒさせることがある@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "まひさせることがある@"
+ENDC
 
 RockThrowDescription:
 	db   "ちいさな　いわ<WO>なげつけて"
@@ -753,7 +783,11 @@ EggBombDescription:
 
 LickDescription:
 	db   "ながいしたで　なめまわして　<KOUGEKI>"
+IF DEF(_PROTO)
+	next "てき<WO>マヒさせることがある@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "てき<WO>まひさせることがある@"
+ENDC
 
 SmogDescription:
 	db   "はいきガス<WO>ふきかけて　<KOUGEKI>"
@@ -813,7 +847,11 @@ HiJumpKickDescription:
 
 GlareDescription:
 	db   "おなか<NO>もようで　てき<WO>いかくし"
+IF DEF(_PROTO)
+	next "おびえさせて　マヒさせてしまう@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "おびえさせて　まひさせてしまう@"
+ENDC
 
 DreamEaterDescription:
 	db   "ねているてき<NI>あたえた　ダメージの"
@@ -1032,7 +1070,11 @@ SpikesDescription:
 
 ZapCannonDescription:
 	db   "あたりにくい<GA>ダメージ<WA>おおきい"
+IF DEF(_PROTO)
+	next "あたれば　かならず　マヒさせる@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "あたれば　かならず　まひさせる@"
+ENDC
 
 ForesightDescription:
 	db   "わざ<GA>あたりにくくなった　てきに"
@@ -1100,7 +1142,11 @@ MilkDrinkDescription:
 
 SparkDescription:
 	db   "でんき<WO>まと<TTE>　とっしんする"
+IF DEF(_PROTO)
+	next "てき<WO>マヒさせることがある@"
+ELIF DEF(_REV0) || DEF(_REV1)
 	next "てき<WO>まひさせることがある@"
+ENDC
 
 FuryCutterDescription:
 	db   "れんぞくで　あてると"

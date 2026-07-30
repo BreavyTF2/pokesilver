@@ -4,8 +4,11 @@ BattleCommand_BellyDrum:
 	ld a, [wAttackMissed]
 	and a
 	jr nz, .failed
-
+IF DEF(_PROTO)
+	callfar GetHalfHP
+ELIF DEF(_REV0) || DEF(_REV1)
 	callfar GetHalfMaxHP
+ENDC
 	callfar CheckUserHasEnoughHP
 	jr nc, .failed
 

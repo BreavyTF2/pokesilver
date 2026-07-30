@@ -74,13 +74,7 @@ _UnownPrinter:
 	jr nz, .pressed_b
 
 	ldh a, [hJoyPressed]
-	vc_patch Forbid_printing_Unown
-if DEF(_GOLD_VC) || DEF(_SILVER_VC)
-	and NO_INPUT
-else
 	and PAD_A
-endc
-	vc_patch_end
 	jr nz, .pressed_a
 
 	call .LeftRight

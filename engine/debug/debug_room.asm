@@ -1029,9 +1029,11 @@ FieldDebug_ItemDispenser:
 	call Functionfc78f
 	ret c
 	jr z, .asm_fc72a
+IF DEF(_REV0) || DEF(_REV1)
 	ld a, [wd0c5]
 	and a
 	ret z
+ENDC
 	call .asm_fc740
 	and a
 	ret
@@ -1085,31 +1087,39 @@ Functionfc78f:
 
 .up
 	ld hl, wd0c5
+IF DEF(_REV0) || DEF(_REV1)
 	ld a, [hl]
 	cp $fb
 	jr z, .asm_fc7b8
+ENDC
 	inc [hl]
 	xor a
 	ret
 
+IF DEF(_REV0) || DEF(_REV1)
 .asm_fc7b8
 	ld [hl], 1
 	xor a
 	ret
+ENDC
 
 .down
 	ld hl, wd0c5
+IF DEF(_REV0) || DEF(_REV1)
 	ld a, [hl]
 	cp 1
 	jr z, .asm_fc7c7
+ENDC
 	dec [hl]
 	xor a
 	ret
 
+IF DEF(_REV0) || DEF(_REV1)
 .asm_fc7c7
 	ld [hl], $fb
 	xor a
 	ret
+ENDC
 
 .left
 	ld hl, wd0c6

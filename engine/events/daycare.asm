@@ -705,7 +705,12 @@ DayCare_InitBreeding:
 	ld b, wEggMonDVs - wEggMonStatExp
 	ld hl, wEggMonStatExp
 .loop2
+IF DEF(_PROTO)
+	ld [de], a
+	inc de
+ELIF DEF(_REV0) || DEF(_REV1)
 	ld [hli], a
+ENDC
 	dec b
 	jr nz, .loop2
 	ld hl, wEggMonDVs

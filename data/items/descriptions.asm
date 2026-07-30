@@ -257,8 +257,12 @@ ItemDescriptions:
 	dw TeruSama35Desc
 	dw TeruSama36Desc
 	dw TeruSama37Desc
+IF DEF(_PROTO)
+	assert_table_length $100 - 1
+ELIF DEF(_REV0) || DEF(_REV1)
 	dw TeruSama37Desc
 	assert_table_length $100
+ENDC
 
 MasterBallDesc:
 	db   "#<WO>かならず　つかまえられる"

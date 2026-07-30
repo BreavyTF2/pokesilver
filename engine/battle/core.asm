@@ -347,6 +347,9 @@ HandleBerserkGene:
 	call GetBattleVarAddr
 	push af
 	set SUBSTATUS_CONFUSED, [hl]
+IF DEF(_PROTO)
+	farcall BattleCommand_AttackUp2
+ELIF DEF(_REV0) || DEF(_REV1)
 	ld a, BATTLE_VARS_MOVE_ANIM
 	call GetBattleVarAddr
 	push hl
@@ -359,6 +362,7 @@ HandleBerserkGene:
 	pop af
 	pop hl
 	ld [hl], a
+ENDC
 	call GetItemName
 	ld hl, BattleText_UsersStringBuffer1Activated
 	call StdBattleTextbox
@@ -2325,9 +2329,11 @@ WinTrainerBattle:
 
 	ld a, [wAmuletCoin]
 	and a
-	call nz, .DoubleReward
-	call .CheckMaxedOutMomMoney
+	call nz, DoubleReward
+	call CheckMaxedOutMomMoney
+IF DEF(_REV0) || DEF(_REV1)
 	push af
+ENDC
 	ld a, FALSE
 	jr nc, .okay
 	ld a, [wMomSavingMoney]
@@ -2357,14 +2363,18 @@ WinTrainerBattle:
 	jr .loop2
 
 .done
-	call .DoubleReward
-	call .DoubleReward
+	call DoubleReward
+	call DoubleReward
+IF DEF(_PROTO)
+	call CheckMaxedOutMomMoney
+ELIF DEF(_REV0) || DEF(_REV1)
 	pop af
+ENDC
 	jr nc, .KeepItAll
 	ld a, [wMomSavingMoney]
 	and MOM_SAVING_MONEY_MASK
 	jr z, .KeepItAll
-	ld hl, .SentToMomTexts
+	ld hl, SentToMomTexts
 	dec a
 	ld c, a
 	ld b, 0
@@ -2395,7 +2405,11 @@ WinTrainerBattle:
 	pop bc
 	ret
 
-.DoubleReward:
+IF DEF(_PROTO)
+INCLUDE "engine/battle/add_battle_money.asm"
+ENDC
+
+DoubleReward:
 	ld hl, wBattleReward + 2
 	sla [hl]
 	dec hl
@@ -2409,13 +2423,13 @@ WinTrainerBattle:
 	ld [hl], a
 	ret
 
-.SentToMomTexts:
+SentToMomTexts:
 ; entries correspond to MOM_SAVING_* constants
 	dw SentSomeToMomText
 	dw SentHalfToMomText
 	dw SentAllToMomText
 
-.CheckMaxedOutMomMoney:
+CheckMaxedOutMomMoney:
 	ld hl, wMomsMoney + 2
 	ld a, [hld]
 	cp LOW(MAX_MONEY)
@@ -2425,32 +2439,9 @@ WinTrainerBattle:
 	sbc HIGH(MAX_MONEY >> 8)
 	ret
 
-AddBattleMoneyToAccount:
-	ld c, 3
-	and a
-	push de
-.loop
-	ld a, [de]
-	adc [hl]
-	ld [de], a
-	dec de
-	dec hl
-	dec c
-	jr nz, .loop
-	pop hl
-	ld a, [hld]
-	cp LOW(MAX_MONEY)
-	ld a, [hld]
-	sbc HIGH(MAX_MONEY) ; mid
-	ld a, [hl]
-	sbc HIGH(MAX_MONEY >> 8)
-	ret c
-	ld [hl], HIGH(MAX_MONEY >> 8)
-	inc hl
-	ld [hl], HIGH(MAX_MONEY) ; mid
-	inc hl
-	ld [hl], LOW(MAX_MONEY)
-	ret
+IF DEF(_REV0) || DEF(_REV1)
+INCLUDE "engine/battle/add_battle_money.asm"
+ENDC
 
 PlayVictoryMusic:
 	push de
@@ -4184,10 +4175,14 @@ UseHeldStatusHealingItem:
 	ld hl, CalcPlayerStats
 
 .got_pointer
+IF DEF(_REV0) || DEF(_REV1)
 	call SwitchTurnCore
+ENDC
 	ld a, BANK(CalcPlayerStats) ; aka BANK(CalcEnemyStats)
 	rst FarCall
+IF DEF(_REV0) || DEF(_REV1)
 	call SwitchTurnCore
+ENDC
 	call ItemRecoveryAnim
 	call UseOpponentItem
 	ld a, $1
@@ -4367,8 +4362,10 @@ DrawPlayerHUD:
 	; HP bar
 	hlcoord 10, 9
 	ld b, 1
+IF DEF(_REV0) || DEF(_REV1)
 	xor a ; PARTYMON
 	ld [wMonType], a
+ENDC
 	predef DrawPlayerHP
 
 	; Exp bar
@@ -4926,6 +4923,10 @@ TryPlayerSwitch:
 	jp z, BattleMenuPKMN_Loop
 	ld a, [wCurBattleMon]
 	ld [wLastPlayerMon], a
+IF DEF(_PROTO)
+	ld a, [wCurPartyMon]
+	ld [wCurBattleMon], a
+ENDC
 	ld a, BATTLEPLAYERACTION_SWITCH
 	ld [wBattlePlayerAction], a
 	call ClearPalettes
@@ -4935,8 +4936,10 @@ TryPlayerSwitch:
 	call CloseWindow
 	call GetMemSGBLayout
 	call SetDefaultBGPAndOBP
+IF DEF(_REV0) || DEF(_REV1)
 	ld a, [wCurPartyMon]
 	ld [wCurBattleMon], a
+ENDC
 PlayerSwitch:
 	ld a, 1
 	ld [wPlayerIsSwitching], a
@@ -5792,7 +5795,6 @@ LinkBattleSendReceiveAction:
 
 .use_move
 	ld [wPlayerLinkAction], a
-	vc_hook Wireless_start_exchange
 	callfar PlaceWaitingText
 
 .waiting
@@ -5801,36 +5803,20 @@ LinkBattleSendReceiveAction:
 	ld a, [wOtherPlayerLinkAction]
 	inc a
 	jr z, .waiting
-
-	vc_hook Wireless_end_exchange
-	vc_patch Wireless_net_delay_1
-if DEF(_GOLD_VC) || DEF(_SILVER_VC)
-	ld b, 26
-else
 	ld b, 10
-endc
-	vc_patch_end
+
 .receive
 	call DelayFrame
 	call LinkTransfer
 	dec b
 	jr nz, .receive
-
-	vc_hook Wireless_start_send_zero_bytes
-	vc_patch Wireless_net_delay_2
-if DEF(_GOLD_VC) || DEF(_SILVER_VC)
-	ld b, 26
-else
 	ld b, 10
-endc
-	vc_patch_end
+
 .acknowledge
 	call DelayFrame
 	call LinkDataReceived
 	dec b
 	jr nz, .acknowledge
-
-	vc_hook Wireless_end_send_zero_bytes
 	ret
 
 LoadEnemyMon:
@@ -8168,7 +8154,20 @@ CheckPayDay:
 .okay
 	ld hl, wPayDayMoney + 2
 	ld de, wMoney + 2
+IF DEF(_PROTO)
+	ld c, 3
+	and a
+.loop
+	ld a, [de]
+	adc [hl]
+	ld [de], a
+	dec de
+	dec hl
+	dec c
+	jr nz, .loop
+ELIF DEF(_REV0) || DEF(_REV1)
 	call AddBattleMoneyToAccount
+ENDC
 	ld hl, BattleText_PlayerPickedUpPayDayMoney
 	call StdBattleTextbox
 	ret
@@ -8538,14 +8537,23 @@ AddLastLinkBattleToLinkRecord:
 	ld bc, (sLinkBattleRecord1Draws - sLinkBattleRecord1) + 1
 .okay
 	add hl, bc
+IF DEF(_REV0) || DEF(_REV1)
 	call .CheckOverflow
 	ret nc
+ENDC
 	inc [hl]
 	ret nz
 	dec hl
 	inc [hl]
+IF DEF(_PROTO)
+	ret nz
+	ld a, $ff
+	ld [hli], a
+	ld [hl], a
+ENDC
 	ret
 
+IF DEF(_REV0) || DEF(_REV1)
 .CheckOverflow:
 	dec hl
 	ld a, [hl]
@@ -8555,6 +8563,7 @@ AddLastLinkBattleToLinkRecord:
 	ld a, [hl]
 	cp LOW(MAX_LINK_RECORD)
 	ret
+ENDC
 
 .FindOpponentAndAppendRecord:
 	ld b, NUM_LINK_BATTLE_RECORDS
@@ -8706,7 +8715,6 @@ InitBattleDisplay:
 	predef PlaceGraphic
 	xor a
 	ldh [hWY], a
-	vc_hook Unknown_InitBattleDisplay
 	ldh [rWY], a
 	call WaitBGMap
 	call HideSprites

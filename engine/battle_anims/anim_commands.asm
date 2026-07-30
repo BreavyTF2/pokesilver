@@ -39,7 +39,6 @@ BattleAnimRunScript:
 	bit BATTLE_SCENE, a
 	jr nz, .disabled
 
-	vc_hook Reduce_move_anim_flashing
 	call BattleAnimClearHud
 	call RunBattleAnimScript
 
@@ -120,7 +119,6 @@ BattleAnimRestoreHuds:
 	call BattleAnimDelayFrame
 	call BattleAnimDelayFrame
 	call WaitTop
-	vc_hook Stop_reducing_move_anim_flashing
 	ret
 
 BattleAnimRequestPals:
@@ -625,7 +623,6 @@ BattleAnimCmd_5GFX:
 	xor a
 	ld [wBattleAnimGFXTempTileID], a
 .loop
-	vc_hook Reduce_move_anim_flashing_PRESENT
 	ld a, [wBattleAnimGFXTempTileID]
 	cp (vTiles1 - vTiles0) / TILE_SIZE - BATTLEANIM_BASE_TILE
 	ret nc

@@ -282,7 +282,6 @@ Serial_SyncAndExchangeNybble:: ; unreferenced
 	jp WaitLinkTransfer ; pointless
 
 WaitLinkTransfer::
-	vc_hook Wireless_WaitLinkTransfer
 	ld a, $ff
 	ld [wOtherPlayerLinkAction], a
 .loop
@@ -310,26 +309,14 @@ WaitLinkTransfer::
 	inc a
 	jr z, .loop
 
-	vc_patch Wireless_net_delay_3
-if DEF(_GOLD_VC) || DEF(_SILVER_VC)
-	ld b, 26
-else
 	ld b, 10
-endc
-	vc_patch_end
 .receive
 	call DelayFrame
 	call LinkTransfer
 	dec b
 	jr nz, .receive
 
-	vc_patch Wireless_net_delay_4
-if DEF(_GOLD_VC) || DEF(_SILVER_VC)
-	ld b, 26
-else
 	ld b, 10
-endc
-	vc_patch_end
 .acknowledge
 	call DelayFrame
 	call LinkDataReceived
@@ -338,7 +325,6 @@ endc
 
 	ld a, [wOtherPlayerLinkAction]
 	ld [wOtherPlayerLinkMode], a
-	vc_hook Wireless_WaitLinkTransfer_ret
 	ret
 
 LinkTransfer::

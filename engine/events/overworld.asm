@@ -1227,7 +1227,12 @@ Script_MightyWhirlpool:
 	jumptext .MayPassWhirlpoolText
 
 .MayPassWhirlpoolText:
+IF DEF(_PROTO)
+	text "はげしくうみが"
+	line "うずまいている！"
+ELIF DEF(_REV0) || DEF(_REV1)
 	text "はげしく　うずまいている！"
+ENDC
 
 	para "<⋯>#のわざで"
 	line "どうにか　できるかも"

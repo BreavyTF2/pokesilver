@@ -20,7 +20,6 @@ DoBattleTransition:
 	ld hl, hVBlank
 	ld a, [hl]
 	push af
-	vc_hook Reduce_battle_transition_flashing
 	ld [hl], VBLANK_CUTSCENE
 
 .loop
@@ -48,7 +47,6 @@ DoBattleTransition:
 	ldh [hSCY], a
 
 	pop af
-	vc_hook Stop_reducing_battle_transition_flashing
 	ldh [hVBlank], a
 	call DelayFrame
 	ret
@@ -261,7 +259,6 @@ StartTrainerBattle_Flash:
 	dc 0, 0, 0, 1
 
 StartTrainerBattle_SetUpForWavyOutro:
-	vc_hook Stop_reducing_battle_transition_flashing_WavyOutro
 	farcall RespawnPlayerAndOpponent
 
 	call StartTrainerBattle_NextScene
@@ -318,7 +315,6 @@ StartTrainerBattle_SineWave:
 	ret
 
 StartTrainerBattle_SetUpForSpinOutro:
-	vc_hook Stop_reducing_battle_transition_flashing_SpinOutro
 	farcall RespawnPlayerAndOpponent
 	call StartTrainerBattle_NextScene
 	xor a
@@ -459,7 +455,6 @@ ENDM
 .wedge5: db 4, 0, 3, 0, 3, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, -1
 
 StartTrainerBattle_SetUpForRandomScatterOutro:
-	vc_hook Stop_reducing_battle_transition_flashing_ScatterOutro
 	farcall RespawnPlayerAndOpponent
 	call StartTrainerBattle_NextScene
 	ld a, $10
@@ -677,7 +672,6 @@ StartTrainerBattle_DrawSineWave:
 	calc_sine_wave
 
 StartTrainerBattle_ZoomToBlack:
-	vc_hook Stop_reducing_battle_transition_flashing_ZoomToBlack
 	farcall RespawnPlayerAndOpponent
 	ld de, .boxes
 

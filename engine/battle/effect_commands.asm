@@ -1067,6 +1067,7 @@ BattleCommand_DoTurn:
 	cp EFFECT_FLY
 	jr z, .print
 
+IF DEF(_REV0) || DEF(_REV1)
 	cp EFFECT_ROLLOUT
 	jr z, .print
 
@@ -1075,6 +1076,7 @@ BattleCommand_DoTurn:
 
 	cp EFFECT_RAMPAGE
 	jr z, .print
+ENDC
 
 ; 'but no pp is left for the move'
 	ld hl, NoPPLeftText
@@ -5771,8 +5773,10 @@ BattleCommand_FinishConfusingTarget:
 
 	call GetOpponentItem
 	ld a, b
+IF DEF(_REV0) || DEF(_REV1)
 	cp HELD_HEAL_STATUS
 	jr z, .heal_confusion
+ENDC
 	cp HELD_HEAL_CONFUSION
 	ret nz
 .heal_confusion

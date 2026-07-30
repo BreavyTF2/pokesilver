@@ -761,7 +761,6 @@ _PushSGBPals:
 
 InitSGBBorder:
 	call CheckCGB
-	vc_hook Unknown_network_reset
 	ret nz
 
 ; SGB/DMG only
@@ -807,6 +806,31 @@ InitCGBPals::
 	call ByteFill
 	ld a, BANK(vTiles0)
 	ldh [rVBK], a
+IF DEF(_PROTO)
+	ld hl, DiplomaPalettes
+	ld a, BGPI_AUTOINC
+	ldh [rBGPI], a
+	ld c, 8 palettes
+.bgpals_loop
+	ld a, [hli]
+	ldh [rBGPD], a
+	dec c
+	jr nz, .bgpals_loop
+	ld a, OBPI_AUTOINC
+	ldh [rOBPI], a
+	ld c, 8 palettes
+.obpals_loop
+	ld a, [hli]
+	ldh [rOBPD], a
+	dec c
+	jr nz, .obpals_loop
+	ld hl, DiplomaPalettes
+	ld de, wBGPals1
+	ld bc, 16 palettes
+	call CopyBytes
+	ld a, 1
+	ldh [hCGBPalUpdate], a
+ELIF DEF(_REV0) || DEF(_REV1)
 	ld a, BGPI_AUTOINC
 	ldh [rBGPI], a
 	ld c, 4 * TILE_WIDTH
@@ -839,6 +863,7 @@ InitCGBPals::
 	ld [hli], a
 	dec c
 	jr nz, .loop
+ENDC
 	ret
 
 _InitSGBBorderPals:

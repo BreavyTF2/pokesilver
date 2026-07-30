@@ -8,7 +8,6 @@ INCLUDE "macros/data.asm"
 INCLUDE "macros/code.asm"
 INCLUDE "macros/gfx.asm"
 INCLUDE "macros/coords.asm"
-INCLUDE "macros/vc.asm"
 
 INCLUDE "macros/scripts/audio.asm"
 INCLUDE "macros/scripts/maps.asm"
@@ -64,12 +63,3 @@ INCLUDE "constants/tileset_constants.asm"
 INCLUDE "constants/trainer_constants.asm"
 INCLUDE "constants/trainer_data_constants.asm"
 INCLUDE "constants/type_constants.asm"
-
-IF DEF(_GOLD_VC)
-INCLUDE "vc/pokegold.constants.asm"
-ENDC
-IF DEF(_SILVER_VC)
-INCLUDE "vc/pokesilver.constants.asm"
-ENDC
-
-;INCLUDE "macros/legacy.asm"

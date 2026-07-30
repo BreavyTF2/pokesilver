@@ -140,8 +140,21 @@ SECTION "Boxes 1-6", SRAM
 
 SECTION "Boxes 7-9", SRAM
 
+UNION
 ; sBox7 - sBox9
 	boxes 3
+
+NEXTU
+IF DEF(_PROTO)
+
+	ds 9
+sBrokenBackupGameData::
+sBrokenBackupPlayerData:: ds wPlayerDataEnd - wPlayerData
+	ds wCurMapDataEnd - wCurMapData
+	ds wPokemonDataEnd - wPokemonData
+sBrokenBackupGameDataEnd::
+ENDC
+ENDU
 
 ; All 9 boxes fit within 2 SRAM banks
 	assert box_n == NUM_BOXES, \
@@ -149,6 +162,11 @@ SECTION "Boxes 7-9", SRAM
 
 
 SECTION "Backup Save", SRAM
+
+IF DEF(_PROTO)
+
+	ds $100
+ENDC
 
 sBackupOptions:: ds wOptionsEnd - wOptions
 sBackupCheckValue1:: db ; loaded with SAVE_CHECK_VALUE_1, used to check save corruption
@@ -159,8 +177,11 @@ sBackupCurMapData::  ds wCurMapDataEnd - wCurMapData
 sBackupPokemonData:: ds wPokemonDataEnd - wPokemonData
 sBackupGameDataEnd::
 
+IF DEF(_REV0) || DEF(_REV1)
+
 	ds $81
 sBackupChecksum:: dw
 sBackupCheckValue2:: db ; loaded with SAVE_CHECK_VALUE_2, used to check save corruption
+ENDC
 
 ENDSECTION

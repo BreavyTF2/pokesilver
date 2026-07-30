@@ -3,11 +3,20 @@ SECTION "Audio RAM", WRAM0
 ; nonzero if playing
 wMusicPlaying:: db
 
+UNION
 wAudio::
 ; wChannel1 - wChannel8
 for n, 1, NUM_CHANNELS + 1
 wChannel{d:n}:: channel_struct wChannel{d:n}
 endr
+
+NEXTU
+IF DEF(_PROTO) ; SRAM overflow
+	ds 12
+sBackupChecksum:: dw
+sBackupCheckValue2:: db
+ENDC
+ENDU
 
 	ds 1
 
@@ -127,8 +136,11 @@ wPrinterConnectionOpen:: db
 wPrinterOpcode:: db
 wPrevDexEntry:: db
 wDisableTextAcceleration:: db
+
+IF DEF(_REV0) || DEF(_REV1)
 wPCItemsCursor:: db
 wPCItemsScrollPosition:: db
+ENDC
 
 
 SECTION "GBC Palettes", WRAM0
@@ -1718,6 +1730,9 @@ wLastPocket:: db
 
 wPartyMenuCursor:: db
 wItemsPocketCursor:: db
+IF DEF(_PROTO)
+wPCItemsCursor::
+ENDC
 wKeyItemsPocketCursor:: db
 wBallsPocketCursor:: db
 wTMHMPocketCursor:: db
@@ -1725,6 +1740,9 @@ wTMHMPocketCursor:: db
 	ds 1
 
 wItemsPocketScrollPosition:: db
+IF DEF(_PROTO)
+wPCItemsScrollPosition::
+ENDC
 wKeyItemsPocketScrollPosition:: db
 wBallsPocketScrollPosition:: db
 wTMHMPocketScrollPosition:: db

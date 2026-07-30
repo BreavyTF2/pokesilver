@@ -155,7 +155,11 @@ ErikaExplainTMText:
 	cont "すばらしい　わざ　です"
 
 	para "よろしかったら"
+IF DEF(_PROTO)
+	line "これ<WO>おつかい<NI>な<TTE>"
+ELIF DEF(_REV0) || DEF(_REV1)
 	line "おつかい<NI>な<TTE>"
+ENDC
 	done
 
 ErikaAfterBattleText:
@@ -163,7 +167,11 @@ ErikaAfterBattleText:
 	line "くやしい　も<NO>ですね<⋯>"
 
 	para "しかし　つよい　かた<GA>いらっしゃる"
+IF DEF(_PROTO)
+	line "こと<WA>はげみにも　なります"
+ELIF DEF(_REV0) || DEF(_REV1)
 	line "こと<WA>はげみにも　なりますわ"
+ENDC
 	done
 
 LassMichelleSeenText:

@@ -5,9 +5,11 @@ CalcLevel:
 	ld d, 1
 .next_level
 	inc d
+IF DEF(_REV0) || DEF(_REV1)
 	ld a, d
 	cp LOW(MAX_LEVEL + 1)
 	jr z, .got_level
+ENDC
 	call CalcExpAtLevel
 	push hl
 	ld hl, wTempMonExp + 2

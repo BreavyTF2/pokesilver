@@ -344,6 +344,9 @@ GoldenrodUndergroundSwitchRoomEntrances_DontToggle:
 	end
 
 GoldenrodUndergroundSwitchRoomEntrances_UpdateDoors:
+IF DEF(_PROTO)
+	writetext SwitchRoomText_ShutterSound
+ENDC
 	readmem wUndergroundSwitchPositions
 	ifequal 0, .Position0
 	ifequal 1, .Position1
@@ -726,6 +729,12 @@ SwitchRoomText_Emergency:
 	text "スイッチ<NI>ひじょうよう"
 	line "と　かかれている"
 	done
+
+IF DEF(_PROTO)
+SwitchRoomText_ShutterSound:
+	text "シャッター<NO>おとがする<⋯>"
+	done
+ENDC
 
 GoldenrodUndergroundSwitchRoomEntrances_MapEvents:
 	db 0, 0 ; filler

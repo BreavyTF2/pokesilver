@@ -32,6 +32,16 @@ HallOfFame::
 	pop af
 	jp Credits
 
+IF DEF(_PROTO)
+RedCredits::
+	call HallOfFame_FadeOutMusic
+	call DisableSpriteUpdates
+	ld a, SPAWN_RED
+	ld [wSpawnAfterChampion], a
+	ld a, [wStatusFlags]
+	jp Credits
+
+ELIF DEF(_REV0) || DEF(_REV1)
 RedCredits::
 	ld a, LOW(MUSIC_NONE)
 	ld [wMusicFadeID], a
@@ -51,6 +61,7 @@ RedCredits::
 	ld [wSpawnAfterChampion], a
 	ld a, [wStatusFlags]
 	jp Credits
+ENDC
 
 HallOfFame_FadeOutMusic:
 	ld a, LOW(MUSIC_NONE)
@@ -63,7 +74,12 @@ HallOfFame_FadeOutMusic:
 	xor a
 	ld [wStateFlags], a
 	ldh [hMapAnims], a
+IF DEF(_PROTO)
+	call ClearSprites
+	call ClearBGPalettes
+ELIF DEF(_REV0) || DEF(_REV1)
 	farcall InitDisplayForHallOfFame
+ENDC
 	ld c, 100
 	jp DelayFrames
 
@@ -77,6 +93,16 @@ HallOfFame_PlayMusicDE::
 	ret
 
 AnimateHallOfFame:
+IF DEF(_PROTO)
+	call DisableLCD
+	call LoadStandardFont
+	call LoadFontsBattleExtra
+	hlbgcoord 0, 0
+	ld bc, vBGMap1 - vBGMap0
+	ld a, '　'
+	call ByteFill
+	call EnableLCD
+ENDC
 	xor a
 	ld [wJumptableIndex], a
 	call LoadHOFTeam

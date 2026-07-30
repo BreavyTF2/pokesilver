@@ -4,13 +4,8 @@ roms := \
 	pokegold11.gbc \
 	pokesilver11.gbc \
 	pokegold11_debug.gbc \
-	pokesilver11_debug.gbc
-protos := \
-	pokegold11_debug_p.gb \
-	pokesilver11_debug_p.gb
-patches := \
-	pokegold11.patch \
-	pokesilver11.patch
+	pokesilver11_debug.gbc \
+	pokesilver_proto.gbc
 
 rom_obj := \
 	audio.o \
@@ -38,8 +33,7 @@ gold11_excl_obj         := $(addsuffix _gold11.o,$(gs_excl_asm))
 silver11_excl_obj       := $(addsuffix _silver11.o,$(gs_excl_asm))
 gold11_debug_excl_obj   := $(addsuffix _gold11_debug.o,$(gs_excl_asm))
 silver11_debug_excl_obj := $(addsuffix _silver11_debug.o,$(gs_excl_asm))
-gold11_vc_excl_obj      := $(addsuffix _gold11_vc.o,$(gs_excl_asm))
-silver11_vc_excl_obj    := $(addsuffix _silver11_vc.o,$(gs_excl_asm))
+silver_proto_excl_obj   := $(addsuffix _silver_proto.o,$(gs_excl_asm))
 
 pokegold_obj           := $(rom_obj:.o=_gold.o) $(gold_excl_obj)
 pokesilver_obj         := $(rom_obj:.o=_silver.o) $(silver_excl_obj)
@@ -47,8 +41,7 @@ pokegold11_obj         := $(rom_obj:.o=_gold11.o) $(gold11_excl_obj)
 pokesilver11_obj       := $(rom_obj:.o=_silver11.o) $(silver11_excl_obj)
 pokegold11_debug_obj   := $(rom_obj:.o=_gold11_debug.o) $(gold11_debug_excl_obj)
 pokesilver11_debug_obj := $(rom_obj:.o=_silver11_debug.o) $(silver11_debug_excl_obj)
-pokegold11_vc_obj      := $(rom_obj:.o=_gold11_vc.o) $(gold11_vc_excl_obj)
-pokesilver11_vc_obj    := $(rom_obj:.o=_silver11_vc.o) $(silver11_vc_excl_obj)
+pokesilver_proto_obj   := $(rom_obj:.o=_silver_proto.o) $(silver_proto_excl_obj)
 
 
 ### Build tools
@@ -85,8 +78,7 @@ RGBGFXFLAGS  ?= -Weverything
 	silver11 \
 	gold11_debug \
 	silver11_debug \
-	gold11_vc \
-	silver11_vc \
+	silver_proto \
 	clean \
 	tidy \
 	compare \
@@ -99,8 +91,7 @@ gold11:         pokegold11.gbc
 silver11:       pokesilver11.gbc
 gold11_debug:   pokegold11_debug.gbc
 silver11_debug: pokesilver11_debug.gbc
-gold11_vc:      pokegold11.patch
-silver11_vc:    pokesilver11.patch
+silver_proto:   pokesilver_proto.gbc
 
 clean: tidy
 	find gfx \
@@ -127,12 +118,12 @@ tidy:
 	      $(pokesilver11_obj) \
 	      $(pokegold11_debug_obj) \
 	      $(pokesilver11_debug_obj) \
-	      $(pokegold11_vc_obj) \
-	      $(pokesilver11_vc_obj) \
+	      $(pokesilver_proto_obj) \
 	      rgbdscheck.o
 	$(MAKE) clean -C tools/
 
 compare: $(roms) $(protos)
+# compare: pokegold.gbc pokesilver.gbc pokesilver11_debug.gbc pokesilver_proto.gbc
 	@$(SHA1) -c roms.sha1
 
 tools:
@@ -151,11 +142,7 @@ $(pokegold11_obj):         RGBASMFLAGS += -D _GOLD -D _REV1
 $(pokesilver11_obj):       RGBASMFLAGS += -D _SILVER -D _REV1
 $(pokegold11_debug_obj):   RGBASMFLAGS += -D _GOLD -D _REV1 -D _DEBUG
 $(pokesilver11_debug_obj): RGBASMFLAGS += -D _SILVER -D _REV1 -D _DEBUG
-$(pokegold11_vc_obj):      RGBASMFLAGS += -D _GOLD -D _REV1 -D _GOLD_VC
-$(pokesilver11_vc_obj):    RGBASMFLAGS += -D _SILVER -D _REV1 -D _SILVER_VC
-
-%.patch: %_vc.gbc %.gbc vc/%.patch.template
-	tools/make_patch $*_vc.sym $^ $@
+$(pokesilver_proto_obj):   RGBASMFLAGS += -D _SILVER -D _PROTO -D _DEBUG
 
 rgbdscheck.o: rgbdscheck.asm
 	$(RGBASM) -o $@ $<
@@ -188,10 +175,8 @@ $(foreach obj, $(filter-out $(gold11_debug_excl_obj), $(pokegold11_debug_obj)), 
 	$(eval $(call DEP,$(obj),$(obj:_gold11_debug.o=.asm))))
 $(foreach obj, $(filter-out $(silver11_debug_excl_obj), $(pokesilver11_debug_obj)), \
 	$(eval $(call DEP,$(obj),$(obj:_silver11_debug.o=.asm))))
-$(foreach obj, $(filter-out $(gold11_vc_excl_obj), $(pokegold11_vc_obj)), \
-	$(eval $(call DEP,$(obj),$(obj:_gold11_vc.o=.asm))))
-$(foreach obj, $(filter-out $(silver11_vc_excl_obj), $(pokesilver11_vc_obj)), \
-	$(eval $(call DEP,$(obj),$(obj:_silver11_vc.o=.asm))))
+$(foreach obj, $(filter-out $(silver_proto_excl_obj), $(pokesilver_proto_obj)), \
+	$(eval $(call DEP,$(obj),$(obj:_silver_proto.o=.asm))))
 
 # Dependencies for game-exclusive objects (keep _gold and _silver in asm file basenames)
 $(foreach obj, $(gold_excl_obj) $(silver_excl_obj), \
@@ -204,10 +189,8 @@ $(foreach obj, $(gold11_debug_excl_obj), \
 	$(eval $(call DEP,$(obj),$(obj:_gold11_debug.o=_gold.asm))))
 $(foreach obj, $(silver11_debug_excl_obj), \
 	$(eval $(call DEP,$(obj),$(obj:_silver11_debug.o=_silver.asm))))
-$(foreach obj, $(gold11_vc_excl_obj), \
-	$(eval $(call DEP,$(obj),$(obj:_gold11_vc.o=_gold.asm))))
-$(foreach obj, $(silver11_vc_excl_obj), \
-	$(eval $(call DEP,$(obj),$(obj:_silver11_vc.o=_silver.asm))))
+$(foreach obj, $(silver_proto_excl_obj), \
+	$(eval $(call DEP,$(obj),$(obj:_silver_proto.o=_silver.asm))))
 
 endif
 
@@ -219,20 +202,11 @@ pokegold11.gbc:         RGBFIXFLAGS += -n 1 -t POKEMON_GLD -i AAUJ
 pokesilver11.gbc:       RGBFIXFLAGS += -n 1 -t POKEMON_SLV -i AAXJ
 pokegold11_debug.gbc:   RGBFIXFLAGS += -n 1 -t POKEMON_GLD -i AAUJ
 pokesilver11_debug.gbc: RGBFIXFLAGS += -n 1 -t POKEMON_SLV -i AAXJ
-pokegold11_vc.gbc:      RGBFIXFLAGS += -n 1 -t POKEMON_GLD -i AAUJ
-pokesilver11_vc.gbc:    RGBFIXFLAGS += -n 1 -t POKEMON_SLV -i AAXJ
+pokesilver_proto.gbc:   RGBFIXFLAGS += -n 0 -t POKEMON_SLV -i AAXJ
 
 %.gbc: $$(%_obj) layout.link
 	$(RGBLINK) $(RGBLINKFLAGS) -l layout.link -n $*.sym -m $*.map -o $@ $(filter %.o,$^)
 	$(RGBFIX) $(RGBFIXFLAGS) $@
-
-
-$(protos): RGBFIXFLAGS += -csv -k 01 -n 0 -l 0x33 -m MBC1+RAM+BATTERY -r 3 -p 0 -Wno-overwrite
-pokegold11_debug_p.gb:   RGBFIXFLAGS += -t POKEMON_GLD -i AAUJ
-pokesilver11_debug_p.gb: RGBFIXFLAGS += -t POKEMON_SLV -i AAXJ
-
-%_p.gb: %.gbc
-	$(RGBFIX) $(RGBFIXFLAGS) $< -o $@
 
 
 ### LZ compression rules

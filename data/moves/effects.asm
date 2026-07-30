@@ -1538,8 +1538,13 @@ Endure:
 Rollout:
 	checkrollout
 	checkobedience
+IF DEF(_PROTO)
+	usedmovetext
+	doturn
+ELIF DEF(_REV0) || DEF(_REV1)
 	doturn
 	usedmovetext
+ENDC
 	critical
 	damagestats
 	damagecalc

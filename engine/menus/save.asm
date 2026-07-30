@@ -27,12 +27,17 @@ SaveMenu:
 SaveAfterLinkTrade:
 	call PauseGameLogic
 	farcall StageRTCTimeForSave
+IF DEF(_REV0) || DEF(_REV1)
 	farcall BackupMysteryGift
+ENDC
 	call SavePokemonData
 	call SaveChecksum
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
+IF DEF(_PROTO)
+	farcall BackupMysteryGift
+ENDC
 	farcall SaveRTC
 	call ResumeGameLogic
 	ret
@@ -92,7 +97,9 @@ MoveMonWOMail_InsertMon_SaveGame:
 	ld a, TRUE
 	ld [wSaveFileExists], a
 	farcall StageRTCTimeForSave
+IF DEF(_REV0) || DEF(_REV1)
 	farcall BackupMysteryGift
+ENDC
 	call ValidateSave
 	call SaveOptions
 	call SavePlayerData
@@ -104,6 +111,9 @@ MoveMonWOMail_InsertMon_SaveGame:
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
+IF DEF(_PROTO)
+	farcall BackupMysteryGift
+ENDC
 	farcall SaveRTC
 	call LoadBox
 	call ResumeGameLogic
@@ -274,7 +284,9 @@ _SaveGameData:
 	ld a, TRUE
 	ld [wSaveFileExists], a
 	farcall StageRTCTimeForSave
+IF DEF(_REV0) || DEF(_REV1)
 	farcall BackupMysteryGift
+ENDC
 	call ValidateSave
 	call SaveOptions
 	call SavePlayerData
@@ -287,6 +299,9 @@ _SaveGameData:
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
+IF DEF(_PROTO)
+	farcall BackupMysteryGift
+ENDC
 	farcall SaveRTC
 	ret
 
@@ -433,9 +448,16 @@ SaveBackupPokemonData:
 	ret
 
 SaveBackupChecksum:
+IF DEF(_PROTO)
+	ld hl, sBrokenBackupGameData
+	ld bc, sBrokenBackupGameDataEnd - sBrokenBackupGameData
+	ld a, BANK(sBrokenBackupGameData)
+
+ELIF DEF(_REV0) || DEF(_REV1)
 	ld hl, sBackupGameData
 	ld bc, sBackupGameDataEnd - sBackupGameData
 	ld a, BANK(sBackupGameData)
+ENDC
 	call OpenSRAM
 	call Checksum
 	ld a, e
@@ -453,11 +475,13 @@ TryLoadSaveFile:
 	call LoadBox
 	farcall RestorePartyMonMail
 	farcall RestoreMysteryGift
+IF DEF(_REV0) || DEF(_REV1)
 	call ValidateBackupSave
 	call SaveBackupOptions
 	call SaveBackupPlayerData
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
+ENDC
 	and a
 	ret
 
@@ -512,9 +536,16 @@ TryLoadSaveData:
 	and a
 	jr z, .corrupt
 
+IF DEF(_PROTO)
+	ld a, BANK(sBrokenBackupPlayerData)
+	call OpenSRAM
+	ld hl, sBrokenBackupPlayerData + wStartDay - wPlayerData
+
+ELIF DEF(_REV0) || DEF(_REV1)
 	ld a, BANK(sBackupPlayerData)
 	call OpenSRAM
 	ld hl, sBackupPlayerData + wStartDay - wPlayerData
+ENDC
 	ld de, wStartDay
 	ld bc, 8
 	call CopyBytes

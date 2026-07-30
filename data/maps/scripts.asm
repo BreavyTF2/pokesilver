@@ -34,7 +34,11 @@ INCLUDE "maps/Route29Route46Gate.asm"
 
 SECTION "Map Scripts 2", ROMX
 
+IF DEF(_PROTO)
+INCLUDE "maps/Route3.asm"
+ELIF DEF(_REV0) || DEF(_REV1)
 INCLUDE "maps/Route4.asm"
+ENDC
 INCLUDE "maps/GoldenrodUnderground.asm"
 INCLUDE "maps/GoldenrodUndergroundSwitchRoomEntrances.asm"
 INCLUDE "maps/GoldenrodDeptStoreB1F.asm"
@@ -407,7 +411,11 @@ INCLUDE "maps/Route14.asm"
 INCLUDE "maps/Route12.asm"
 INCLUDE "maps/LavenderTown.asm"
 INCLUDE "maps/Route5.asm"
+IF DEF(_PROTO)
+INCLUDE "maps/Route4.asm"
+ELIF DEF(_REV0) || DEF(_REV1)
 INCLUDE "maps/Route3.asm"
+ENDC
 INCLUDE "maps/Route10South.asm"
 INCLUDE "maps/Route23.asm"
 INCLUDE "maps/SilverCavePokecenter1F.asm"

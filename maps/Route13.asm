@@ -162,7 +162,11 @@ Route13TrainerTipsText:
 
 Route13SignText:
 	text "<KOKO_WA>１３<ROUTE>"
+IF DEF(_PROTO)
+	line "きた　<⋯>　サイレンス　ブリッジ"
+ELIF DEF(_REV0) || DEF(_REV1)
 	line "きた　<⋯>　サイレンズ　ブリッジ"
+ENDC
 	done
 
 Route13DirectionsSignText:

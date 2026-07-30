@@ -34,23 +34,14 @@ DoMysteryGift:
 	; Prepare the first of two messages for wMysteryGiftPartnerData
 	farcall StageDataForMysteryGift
 	call ClearMysteryGiftTrainer
-	vc_patch Infrared_stage_party_data
-if DEF(_GOLD_VC) || DEF(_SILVER_VC)
-	farcall StagePartyDataForMysteryGift
-	call ClearMysteryGiftTrainer
-	nop
-else
 	ld a, 2
 	ld [wMysteryGiftMessageCount], a
 	ld a, wMysteryGiftPartnerDataEnd - wMysteryGiftPartnerData
 	ld [wMysteryGiftStagedDataLength], a
-endc
-	vc_patch_end
 
 	ldh a, [rIE]
 	push af
 	call ExchangeMysteryGiftData
-	vc_hook Infrared_ExchangeMysteryGiftData_end
 	ld d, a
 	xor a
 	ldh [rIF], a
@@ -277,34 +268,7 @@ endc
 
 ExchangeMysteryGiftData:
 	farcall ClearChannels
-	vc_hook Infrared_ExchangeMysteryGiftData_start
-	vc_patch Infrared_ExchangeMysteryGiftData_function
-if DEF(_GOLD_VC) || DEF(_SILVER_VC)
-	nop
-	vc_hook Infrared_ExchangeMysteryGiftData_unknown_Mode100
-	nop
-	nop
-
-.restart ; same location as unpatched .restart
-	ld d, 239
-.loop
-	dec d
-	ld a, d
-	or a
-	jr nz, .loop
-	vc_hook Infrared_ExchangeMysteryGiftData_loop_done
-	nop
-	cp MG_CANCELED
-	ret z
-	nop
-	nop
-	cp MG_OKAY
-	jr nz, .restart
-	ret
-	db LOW(hMGRole) ; unpatched byte left from 'ldh a, [hMGRole]'
-else
 	call InitializeIRCommunicationInterrupts
-
 .restart
 	call BeginIRCommunication
 	call InitializeIRCommunicationRoles
@@ -315,8 +279,6 @@ else
 	jr nz, .restart
 
 	ldh a, [hMGRole]
-endc
-	vc_patch_end
 	cp IR_SENDER
 	jr z, SenderExchangeMysteryGiftDataPayloads
 

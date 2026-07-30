@@ -7,7 +7,11 @@
 	db 45 ; catch rate
 	db 117 ; base exp
 	db BURNT_BERRY, BURNT_BERRY ; items
+IF DEF(_PROTO)
+	db GENDER_F50 ; gender ratio
+ELIF DEF(_REV0) || DEF(_REV1)
 	db GENDER_F25 ; gender ratio
+ENDC
 	db 100 ; unknown 1
 	db 25 ; step cycles to hatch
 	db 5 ; unknown 2

@@ -370,7 +370,6 @@ Script_yesorno:
 	ld a, TRUE
 .no
 	ld [wScriptVar], a
-	vc_hook Unknown_yesorno_ret
 	ret
 
 Script_loadmenu:
@@ -2216,11 +2215,15 @@ Script_endall:
 	ret
 
 Script_halloffame:
+IF DEF(_REV0) || DEF(_REV1)
 	ld hl, wGameTimerPaused
 	res GAME_TIMER_COUNTING_F, [hl]
+ENDC
 	farcall HallOfFame
+IF DEF(_REV0) || DEF(_REV1)
 	ld hl, wGameTimerPaused
 	set GAME_TIMER_COUNTING_F, [hl]
+ENDC
 	jr ReturnFromCredits
 
 Script_credits:
