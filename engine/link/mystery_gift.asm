@@ -25,6 +25,11 @@ DoMysteryGift:
 	call ClearTilemap
 	call ClearSprites
 	call WaitBGMap
+IF DEF(_09_29)
+	call .CheckAlreadyGotFiveGiftsToday
+	ld hl, .MysteryGiftFiveADayText
+	jp nc, .PrintTextAndExit
+ENDC
 	farcall InitMysteryGiftLayout
 	hlcoord 3, 8
 	ld de, .String_PressAToLink_BToCancel
@@ -60,6 +65,7 @@ DoMysteryGift:
 	hlcoord 2, 8
 	ld a, d
 	ld de, .MysteryGiftCanceledText ; Link has been canceled
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	cp MG_CANCELED
 	jp z, .LinkCanceled
 	cp MG_OKAY
@@ -70,6 +76,12 @@ DoMysteryGift:
 	call .CheckAlreadyGotFiveGiftsToday
 	ld hl, .MysteryGiftFiveADayText ; Only 5 gifts a day
 	jp nc, .PrintTextAndExit
+ELIF DEF(_09_29)
+	cp MG_CANCELED
+	jr z, .LinkCanceled
+	cp MG_OKAY
+	jr nz, .CommunicationError
+ENDC
 	call .CheckAlreadyGotAGiftFromThatPerson
 	ld hl, .MysteryGiftOneADayText ; Only one gift a day per person
 	jp c, .PrintTextAndExit
@@ -176,8 +188,13 @@ DoMysteryGift:
 	prompt
 
 .MysteryGiftOneADayText:
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	text "ふしぎなおくりものは　おなじひとから"
 	line "１にち　１かいしか　うけとれません！"
+ELIF DEF(_09_29)
+	text "ふしぎなおくりものは　おなじひとと"
+	line "１にち　１かいしか　できません！"
+ENDC
 	prompt
 
 .MysteryGiftSentText:
@@ -267,6 +284,14 @@ DoMysteryGift:
 	jp CloseSRAM
 
 ExchangeMysteryGiftData:
+IF DEF(_09_29)
+	di
+	ld a, $04
+	ldh [rIE], a
+	xor a
+	ldh [rIF], a
+	ei
+ENDC
 	farcall ClearChannels
 	call InitializeIRCommunicationInterrupts
 .restart
@@ -1111,10 +1136,15 @@ UnlockMysteryGift:
 ; [sMysteryGiftUnlocked] and [sMysteryGiftItem] to 0.
 	call GetMysteryGiftBank
 	ld hl, sMysteryGiftUnlocked
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ld a, [hl]
 	inc a
 	jr nz, .ok
 	ld [hld], a
+ELIF DEF(_09_29)
+	xor a
+	ldi [hl], a
+ENDC
 	assert sMysteryGiftUnlocked - 1 == sMysteryGiftItem
 	ld [hl], a
 .ok

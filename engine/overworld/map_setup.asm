@@ -58,7 +58,7 @@ ReadMapSetupScript:
 	pop hl
 	jr .loop
 
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 FarCall_hl_copy: ; unreferenced
 	ld [wTempBank], a
 	ldh a, [hROMBank]

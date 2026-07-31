@@ -1895,7 +1895,7 @@ BattleAnim_Screech:
 BattleAnim_ConfuseRay:
 	anim_1gfx BATTLE_ANIM_GFX_SPEED
 	anim_bgeffect BATTLE_BG_EFFECT_CYCLE_OBPALS_GRAY_AND_YELLOW, $0, $2, $0
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	anim_bgeffect BATTLE_BG_EFFECT_CYCLE_BGPALS_INVERTED, $0, $2, $0
 ELIF DEF(_REV0) || DEF(_REV1)
 	anim_bgeffect BATTLE_BG_EFFECT_CYCLE_BGPALS_INVERTED, $0, $4, $0
@@ -2667,7 +2667,7 @@ BattleAnim_Withdraw:
 BattleAnim_Psybeam:
 	anim_1gfx BATTLE_ANIM_GFX_PSYCHIC
 	anim_bgeffect BATTLE_BG_EFFECT_CYCLE_OBPALS_GRAY_AND_YELLOW, $0, $2, $0
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	anim_bgeffect BATTLE_BG_EFFECT_CYCLE_BGPALS_INVERTED, $0, $2, $0
 ELIF DEF(_REV0) || DEF(_REV1)
 	anim_bgeffect BATTLE_BG_EFFECT_CYCLE_BGPALS_INVERTED, $0, $4, $0

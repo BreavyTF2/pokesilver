@@ -145,7 +145,7 @@ UNION
 	boxes 3
 
 NEXTU
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 
 	ds 9
 sBrokenBackupGameData::
@@ -163,7 +163,7 @@ ENDU
 
 SECTION "Backup Save", SRAM
 
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 
 	ds $100
 ENDC

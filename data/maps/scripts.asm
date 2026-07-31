@@ -34,7 +34,7 @@ INCLUDE "maps/Route29Route46Gate.asm"
 
 SECTION "Map Scripts 2", ROMX
 
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 INCLUDE "maps/Route3.asm"
 ELIF DEF(_REV0) || DEF(_REV1)
 INCLUDE "maps/Route4.asm"
@@ -411,7 +411,7 @@ INCLUDE "maps/Route14.asm"
 INCLUDE "maps/Route12.asm"
 INCLUDE "maps/LavenderTown.asm"
 INCLUDE "maps/Route5.asm"
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 INCLUDE "maps/Route4.asm"
 ELIF DEF(_REV0) || DEF(_REV1)
 INCLUDE "maps/Route3.asm"

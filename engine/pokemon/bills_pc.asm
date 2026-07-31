@@ -1924,7 +1924,7 @@ ENDC
 	jp hl
 
 .dw_return
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	hlcoord 0, 14
 	lb bc, 2, 18
 	call Textbox
@@ -2199,7 +2199,7 @@ ENDC
 .loop
 	xor a
 	ldh [hBGMapMode], a
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	hlcoord 0, 0
 	ld bc, SCREEN_AREA
 	ld a, '　'
@@ -2214,7 +2214,7 @@ ENDC
 	hlcoord 0, 4
 	lb bc, 8, 9
 	call Textbox
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	ld a, $1
 	ldh [hBGMapMode], a
 ENDC

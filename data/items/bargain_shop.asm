@@ -1,7 +1,7 @@
 BargainShopData:
 	db 5
 	dbw NUGGET,     4500
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	dbw PEARL,      1200
 	dbw BIG_PEARL,  7000
 	dbw STARDUST,   1600

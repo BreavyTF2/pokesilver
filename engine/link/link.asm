@@ -100,6 +100,7 @@ Gen2ToGen1LinkComms:
 
 	ld hl, wOTPartyData
 	call Link_FindFirstNonControlCharacter_SkipZero
+IF DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	push hl
 	ld bc, NAME_LENGTH
 	add hl, bc
@@ -109,7 +110,7 @@ Gen2ToGen1LinkComms:
 	jp z, ExitLinkCommunications
 	cp $7
 	jp nc, ExitLinkCommunications
-
+ENDC
 	ld de, wLinkData
 	ld bc, NAME_LENGTH + (1 + PARTY_LENGTH + 1) + (REDMON_STRUCT_LENGTH + NAME_LENGTH * 2) * PARTY_LENGTH + 3
 	call Link_CopyOTData
@@ -411,24 +412,33 @@ Gen2ToGen2LinkComms:
 	ld hl, wOptions
 	ld a, [hl]
 	push af
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	and 1 << STEREO
 	or TEXT_DELAY_MED
+ELIF DEF(_09_29)
+	ld a, TEXT_DELAY_MED
+ENDC
 	ld [hl], a
 	ld hl, wOTPlayerName
 	ld de, wOTClassName
 	ld bc, NAME_LENGTH
 	call CopyBytes
 	call ReturnToMapFromSubmenu
+
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ld a, [wDisableTextAcceleration]
 	push af
 	ld a, 1
 	ld [wDisableTextAcceleration], a
+ENDC
 
 	; LET'S DO THIS
 	predef StartBattle
 
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	pop af
 	ld [wDisableTextAcceleration], a
+ENDC
 	pop af
 	ld [wOptions], a
 
@@ -1107,7 +1117,13 @@ Link_FindFirstNonControlCharacter_AllowZero:
 InitTradeMenuDisplay:
 	call ClearTilemap
 	call LoadTradeScreenBorderGFX
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	call PlaceTradeScreenTextbox
+ELIF DEF(_09_29)
+	ld a, $3E
+	ld hl, $756A
+	rst $08	; FarCall
+ENDC
 	call PlaceTradeScreenFooter
 	xor a
 	ld hl, wOtherPlayerLinkMode
@@ -1333,9 +1349,15 @@ LinkTrade_TradeStatsMenu:
 	call LinkTradePlaceArrow
 	ld c, 100
 	call DelayFrames
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	farcall ValidateOTTrademon
 	jr c, .abnormal
 	farcall CheckAnyOtherAliveMonsForTrade
+ELIF DEF(_09_29)
+	call ValidateOTTrademon
+	jr c, .abnormal
+	call CheckAnyOtherAliveMonsForTrade
+ENDC
 	jp nc, LinkTrade
 	xor a
 	ld [wUnusedLinkAction], a
@@ -1437,6 +1459,7 @@ LinkTradeOTPartymonMenuCheckCancel:
 ExitLinkCommunications:
 	xor a
 	ld [wUnusedLinkCommunicationByte], a
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	xor a
 	ldh [rSB], a
 	ldh [hSerialSend], a
@@ -1444,6 +1467,7 @@ ExitLinkCommunications:
 	ldh [rSC], a
 	ld a, SC_START | SC_INTERNAL
 	ldh [rSC], a
+ENDC
 	ret
 
 PlaceTradeScreenFooter:
@@ -1488,9 +1512,117 @@ LinkMonStatsScreen:
 	call LoadTradeScreenBorderGFX
 	call SetTradeRoomBGPals
 	call WaitBGMap
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	call PlaceTradeScreenTextbox
+ELIF DEF(_09_29)
+	ld a, $3E
+	ld hl, $756A
+	rst $08	; FarCall
+ENDC
 	jp PlaceTradeScreenFooter
 
+IF DEF(_09_29)
+CheckAnyOtherAliveMonsForTrade:
+	ld a, [wCurTradePartyMon]
+	ld d, a
+	ld a, [wPartyCount]
+	ld b, a
+	ld c, 0
+.loop
+	ld a, c
+	cp d
+	jr z, .next
+	push bc
+	ld a, c
+	ld hl, wPartyMon1HP
+	call GetPartyLocation
+	pop bc
+	ld a, [hli]
+	or [hl]
+	jr nz, .done
+
+.next
+	inc c
+	dec b
+	jr nz, .loop
+	ld a, [wCurOTTradePartyMon]
+	ld hl, wOTPartyMon1HP
+	call GetPartyLocation
+	ld a, [hli]
+	or [hl]
+	jr nz, .done
+	scf
+	ret
+
+.done
+	and a
+	ret
+	
+ValidateOTTrademon:
+	ld a, [wCurOTTradePartyMon]
+	ld hl, wOTPartyMon1Species
+	call GetPartyLocation
+	push hl
+	ld a, [wCurOTTradePartyMon]
+	inc a
+	ld c, a
+	ld b, 0
+	ld hl, wOTPartyCount
+	add hl, bc
+	ld a, [hl]
+	pop hl
+	cp EGG
+	jr z, .matching_or_egg
+	cp [hl]
+	jr nz, .abnormal
+
+.matching_or_egg
+	ld b, h
+	ld c, l
+	ld hl, MON_LEVEL
+	add hl, bc
+	ld a, [hl]
+	cp MAX_LEVEL + 1
+	jr nc, .abnormal
+	ld a, [wLinkMode]
+	cp LINK_TIMECAPSULE
+	jr nz, .normal
+	ld hl, wOTPartySpecies
+	ld a, [wCurOTTradePartyMon]
+	ld c, a
+	ld b, 0
+	add hl, bc
+	ld a, [hl]
+
+	; Magnemite and Magneton's types changed
+	; from Electric to Electric/Steel.
+	cp MAGNEMITE
+	jr z, .normal
+	cp MAGNETON
+	jr z, .normal
+
+	ld [wCurSpecies], a
+	call GetBaseData
+	ld hl, wLinkOTPartyMonTypes
+	add hl, bc
+	add hl, bc
+	ld a, [wBaseType1]
+	cp [hl]
+	jr nz, .abnormal
+	inc hl
+	ld a, [wBaseType2]
+	cp [hl]
+	jr nz, .abnormal
+
+.normal
+	and a
+	ret
+
+.abnormal
+	scf
+	ret
+
+ENDC
 LinkTrade:
 	xor a
 	ld [wUnusedLinkAction], a
@@ -1745,6 +1877,9 @@ LinkTrade:
 	predef TradeAnimationPlayer2
 
 .done_animation
+IF DEF(_09_29)
+	farcall SaveAfterLinkTrade
+ENDC
 	pop af
 	ld c, a
 	ld [wCurPartyMon], a
@@ -1901,6 +2036,7 @@ SetTradeRoomBGPals:
 	call GetSGBLayout
 	jp SetDefaultBGPAndOBP
 
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 PlaceTradeScreenTextbox:
 	hlcoord 0, 1
 	ld b, 12
@@ -1912,6 +2048,7 @@ PlaceTradeScreenTextbox:
 	call LinkTextboxAtHL
 	farcall PlaceTradePartnerNamesAndParty
 	ret
+ENDC
 
 INCLUDE "engine/movie/trade_animation.asm"
 
@@ -2021,8 +2158,10 @@ EnterTimeCapsule:
 	inc a
 	ld [wLinkMode], a
 	ret
+	
 
 WaitForOtherPlayerToExit:
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ld c, 3
 	call DelayFrames
 	ld a, CONNECTION_NOT_ESTABLISHED
@@ -2053,6 +2192,9 @@ WaitForOtherPlayerToExit:
 	call DelayFrames
 	ld a, CONNECTION_NOT_ESTABLISHED
 	ldh [hSerialConnectionStatus], a
+ELIF DEF(_09_29)
+	call Link_ResetSerialRegistersAfterLinkClosure
+ENDC
 	ld hl, wLinkTimeoutFrames
 	xor a
 	ld [hli], a
@@ -2061,13 +2203,34 @@ WaitForOtherPlayerToExit:
 	ld [wLinkMode], a
 	ret
 
+
 SetBitsForLinkTradeRequest:
+IF DEF(_09_29)
+	ld a, USING_INTERNAL_CLOCK
+	ldh [rSB], a
+	xor a
+	ldh [hSerialReceive], a
+	ld a, SC_EXTERNAL
+	ldh [rSC], a
+	ld a, SC_START | SC_EXTERNAL
+	ldh [rSC], a
+ENDC
 	ld a, CABLECLUBROOM_TRADECENTER
 	ld [wPlayerLinkAction], a
 	ld [wChosenCableClubRoom], a
 	ret
 
 SetBitsForBattleRequest:
+IF DEF(_09_29)
+	ld a, USING_INTERNAL_CLOCK
+	ldh [rSB], a
+	xor a
+	ldh [hSerialReceive], a
+	ld a, SC_EXTERNAL
+	ldh [rSC], a
+	ld a, SC_START | SC_EXTERNAL
+	ldh [rSC], a
+ENDC
 	ld a, CABLECLUBROOM_COLOSSEUM
 	ld [wPlayerLinkAction], a
 	ld [wChosenCableClubRoom], a
@@ -2088,6 +2251,7 @@ SetBitsForTimeCapsuleRequest:
 	ret
 
 WaitForLinkedFriend:
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ld a, [wPlayerLinkAction]
 	and a
 	jr z, .no_link_action
@@ -2106,6 +2270,7 @@ WaitForLinkedFriend:
 .no_link_action
 	ld a, $2
 	ld [wLinkTimeoutFrames + 1], a
+ENDC
 	ld a, $ff
 	ld [wLinkTimeoutFrames], a
 .loop
@@ -2127,10 +2292,12 @@ WaitForLinkedFriend:
 	ld a, [wLinkTimeoutFrames]
 	dec a
 	ld [wLinkTimeoutFrames], a
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	jr nz, .not_done
 	ld a, [wLinkTimeoutFrames + 1]
 	dec a
 	ld [wLinkTimeoutFrames + 1], a
+ENDC
 	jr z, .done
 
 .not_done

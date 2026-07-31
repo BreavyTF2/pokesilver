@@ -492,18 +492,29 @@ DrawVariableLengthMenuBox::
 	ret
 
 MenuWriteText::
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	xor a
 	ldh [hBGMapMode], a
+ENDC
 	call GetMenuIndexSet ; sort out the text
 	call RunMenuItemPrintingFunction ; actually write it
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	call SafeUpdateSprites
+ELIF DEF(_09_29)
+	call UpdateSprites
+ENDC
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ldh a, [hOAMUpdate]
 	push af
 	ld a, $1
 	ldh [hOAMUpdate], a
+
 	call ApplyTilemap
 	pop af
 	ldh [hOAMUpdate], a
+ELIF DEF(_09_29)
+	call ApplyTilemap
+ENDC
 	ret
 
 AutomaticGetMenuBottomCoord::

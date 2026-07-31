@@ -1,7 +1,9 @@
 TitleScreen:
 	call ClearBGPalettes
+IF !DEF(_UTILITY)
 	xor a
 	ld [wTimeOfDayPal], a
+ENDC
 	ld de, MUSIC_NONE
 	call PlayMusic
 	call ClearTilemap
@@ -20,14 +22,15 @@ TitleScreen:
 	ld bc, $200 tiles
 	xor a
 	call ByteFill
+IF !DEF(_UTILITY)
 	farcall ClearSpriteAnims
-
+ENDC
 ; Decompress title screen
 	ld hl, TitleScreenGFX1
 	ld de, vTiles2
 	ld a, BANK(TitleScreenGFX1)
 	call FarDecompress
-
+IF !DEF(_UTILITY)
 ; Decompress Ho-Oh/Lugia sprite
 	ld hl, TitleScreenGFX3
 	ld de, vTiles0
@@ -43,17 +46,19 @@ TitleScreen:
 	ld bc, 8 tiles
 	ld a, BANK(TitleScreenGFX2)
 	call FarCopyBytes
-
+ENDC
 	call FillTitleScreenPals
 	call LoadTitleScreenTilemap
+IF !DEF(_UTILITY)
 	ld hl, wSpriteAnimDict
 	xor a ; SPRITE_ANIM_DICT_DEFAULT and tile offset $00
 	ld [hli], a
 	ld [hl], a
 	ld hl, rLCDC
 	set B_LCDC_OBJ_SIZE, [hl]
+ENDC
 	call EnableLCD
-
+IF !DEF(_UTILITY)
 ; Reset timing variables
 	xor a
 	ld hl, wJumptableIndex
@@ -80,13 +85,19 @@ TitleScreen:
 ; Let LCD Stat know we're messing around with SCX
 	ld a, LOW(rSCX)
 	ldh [hLCDCPointer], a
+ENDC
 	ld b, SCGB_GS_TITLE_SCREEN
 	call GetSGBLayout
+IF DEF(_UTILITY)
+	call SetDefaultBGPAndOBP
+ELSE
 	call LoadTitleScreenPals
+ENDC
 	ld de, MUSIC_TITLE
 	call PlayMusic
 	ret
 
+IF !DEF(_UTILITY)
 LoadTitleScreenPals:
 	ldh a, [hCGB]
 	and a
@@ -133,11 +144,14 @@ IF DEF(_SILVER)
 ENDC
 	call DmgToCgbObjPal0
 	ret
+ENDC
 
 FillTitleScreenPals:
+IF !DEF(_UTILITY)
 	ldh a, [hCGB]
 	and a
 	ret z
+ENDC
 	ld a, 1
 	ldh [rVBK], a
 	hlbgcoord 0, 0

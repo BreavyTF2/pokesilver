@@ -806,7 +806,7 @@ InitCGBPals::
 	call ByteFill
 	ld a, BANK(vTiles0)
 	ldh [rVBK], a
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	ld hl, DiplomaPalettes
 	ld a, BGPI_AUTOINC
 	ldh [rBGPI], a

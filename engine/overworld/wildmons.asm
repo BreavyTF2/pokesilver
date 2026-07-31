@@ -211,7 +211,9 @@ TryWildEncounter::
 .EncounterRate:
 	call GetMapEncounterRate
 	call ApplyMusicEffectOnEncounterRate
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	call ApplyCleanseTagEffectOnEncounterRate
+ENDC
 	call Random
 	cp b
 	ret
@@ -247,6 +249,7 @@ ApplyMusicEffectOnEncounterRate::
 	ret
 
 ApplyCleanseTagEffectOnEncounterRate::
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 ; Cleanse Tag halves encounter rate.
 	ld hl, wPartyMon1Item
 	ld de, PARTYMON_STRUCT_LENGTH
@@ -264,6 +267,7 @@ ApplyCleanseTagEffectOnEncounterRate::
 .cleansetag
 	srl b
 	ret
+ENDC
 
 ChooseWildEncounter:
 	call LoadWildMonDataPointer

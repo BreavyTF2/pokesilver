@@ -1,5 +1,5 @@
 ; These functions seem to be related to backwards compatibility
-
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 ValidateOTTrademon:
 	ld a, [wCurOTTradePartyMon]
 	ld hl, wOTPartyMon1Species
@@ -99,6 +99,7 @@ CheckAnyOtherAliveMonsForTrade:
 .done
 	and a
 	ret
+ENDC
 
 PlaceTradePartnerNamesAndParty:
 	hlcoord 3, 1

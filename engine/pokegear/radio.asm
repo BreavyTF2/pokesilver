@@ -548,7 +548,7 @@ OaksPKMNTalk9:
 
 .OPT_GuardedText:
 	text_start
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	line "バグってるかもね"
 ELIF DEF(_REV0) || DEF(_REV1)
 	line "だいじに　したいね！"
@@ -557,7 +557,7 @@ ENDC
 
 .OPT_LovelyText:
 	text_start
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	line "ぶんれつするところ<GA>みてみたいね"
 ELIF DEF(_REV0) || DEF(_REV1)
 	line "メロメロって　かんじー！"
@@ -566,7 +566,7 @@ ENDC
 
 .OPT_SpeedyText:
 	text_start
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	line "パンチ<GA>はやいよね"
 ELIF DEF(_REV0) || DEF(_REV1)
 	line "うごき<GA>すばやいよねー"
@@ -1316,7 +1316,7 @@ PnP_GreatText:
 
 PnP_MyTypeText:
 	text_start
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	line "わたしてきに<WA>すきかも！"
 ELIF DEF(_REV0) || DEF(_REV1)
 	line "わたしてきに<WA>タイプかも！"

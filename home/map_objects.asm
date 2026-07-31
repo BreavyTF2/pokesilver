@@ -189,6 +189,7 @@ CheckWaterfallTile::
 	ret
 
 CheckStandingOnEntrance::
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ld a, [wPlayerTileCollision]
 	cp COLL_DOOR
 	ret z
@@ -198,6 +199,7 @@ CheckStandingOnEntrance::
 	ret z
 	cp COLL_CAVE
 	ret
+ENDC
 
 GetMapObject::
 ; Return the location of map object a in bc.

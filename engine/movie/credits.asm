@@ -624,10 +624,16 @@ Credits_TheEnd:
 CreditsBorderGFX:    INCBIN "gfx/credits/border.2bpp"
 
 CreditsMonsGFX: ; used only for BANK(CreditsMonsGFX)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 CreditsBellossomGFX: INCBIN "gfx/credits/bellossom.2bpp"
 CreditsTogepiGFX:    INCBIN "gfx/credits/togepi.2bpp"
 CreditsElekidGFX:    INCBIN "gfx/credits/elekid.2bpp"
 CreditsSentretGFX:   INCBIN "gfx/credits/sentret.2bpp"
-
+ELIF DEF(_09_29) ; to fit bank for now
+CreditsBellossomGFX:
+CreditsTogepiGFX:
+CreditsElekidGFX:
+CreditsSentretGFX: INCBIN "gfx/credits/sentret.2bpp"
+ENDC
 INCLUDE "data/credits_script.asm"
 INCLUDE "data/credits_strings.asm"

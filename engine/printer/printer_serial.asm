@@ -529,9 +529,16 @@ Printer_SendPrinterData4:
 Printer_SendNextByte:
 	; decrement 16-bit counter
 	ld hl, wPrinterSendByteCounter
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ld a, [hli]
 	ld d, [hl]
 	ld e, a
+ELIF DEF(_09_29)
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ld a, e
+ENDC
 	or d
 	jr z, .done
 	dec de

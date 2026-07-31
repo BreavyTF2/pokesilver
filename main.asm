@@ -225,6 +225,7 @@ INCLUDE "data/pokemon/unused_pic_banks.asm"
 
 SECTION "bank21", ROMX
 
+INCLUDE "garbage/utility/bank21.asm"
 INCLUDE "engine/printer/printer_serial.asm"
 INCLUDE "engine/printer/printer.asm"
 INCLUDE "gfx/battle_anims.asm"

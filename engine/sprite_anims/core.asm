@@ -132,7 +132,7 @@ _InitSpriteAnimStruct::
 	ret
 
 .found
-IF DEF(_REV0) || DEF(_PROTO)
+IF DEF(_REV0) || DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	pop af
 ENDC
 

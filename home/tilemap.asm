@@ -70,7 +70,11 @@ CopyTilemapAtOnce::
 
 .wait
 	ldh a, [rLY]
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	cp $80 - 1
+ELIF DEF(_09_29)
+	cp $60
+	endc
 	jr c, .wait
 
 	di
@@ -82,11 +86,12 @@ CopyTilemapAtOnce::
 	ldh [rVBK], a
 	hlcoord 0, 0
 	call .CopyBGMapViaStack
-
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 .wait2
 	ldh a, [rLY]
 	cp $80 - 1
 	jr c, .wait2
+ENDC
 	ei
 
 	pop af
@@ -97,17 +102,28 @@ CopyTilemapAtOnce::
 
 .CopyBGMapViaStack:
 ; Copy all tiles to vBGMap
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	ld [hSPBuffer], sp
 	ld sp, hl
+ENDC
 	ldh a, [hBGMapAddress + 1]
 	ld h, a
 	ld l, 0
-	ld a, SCREEN_HEIGHT
-	ldh [hTilesPerCycle], a
-	ld b, STAT_BUSY
-	ld c, LOW(rSTAT)
 
+	ld a, SCREEN_HEIGHT
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+	ldh [hTilesPerCycle], a
+ELIF DEF(_09_29)
+.next:
+	push af
+	ld c, SCREEN_WIDTH
+ENDC
+	ld b, STAT_BUSY
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+	ld c, LOW(rSTAT)
+ENDC
 .loop
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 rept SCREEN_WIDTH / 2
 	pop de
 ; wait until PPU v/hblank mode
@@ -135,7 +151,23 @@ endr
 	ld h, a
 	ld sp, hl
 	ret
-
+ELIF DEF(_09_29)
+	ldh a, [rSTAT]
+	and b
+	jr nz, .loop
+	ld a, [de]
+	inc de
+	ldi [hl], a
+	dec c
+	jr nz, .loop
+	
+	ld bc, 12
+	add hl, bc
+	pop af
+	dec a
+	jr nz, .next
+	ret
+ENDC
 SetDefaultBGPAndOBP::
 ; Inits the Palettes
 ; depending on the system the monochromes palettes or color palettes

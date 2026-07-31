@@ -11,7 +11,7 @@ wChannel{d:n}:: channel_struct wChannel{d:n}
 endr
 
 NEXTU
-IF DEF(_PROTO) ; SRAM overflow
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06) ; SRAM overflow
 	ds 12
 sBackupChecksum:: dw
 sBackupCheckValue2:: db
@@ -1730,7 +1730,7 @@ wLastPocket:: db
 
 wPartyMenuCursor:: db
 wItemsPocketCursor:: db
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 wPCItemsCursor::
 ENDC
 wKeyItemsPocketCursor:: db
@@ -1740,7 +1740,7 @@ wTMHMPocketCursor:: db
 	ds 1
 
 wItemsPocketScrollPosition:: db
-IF DEF(_PROTO)
+IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 wPCItemsScrollPosition::
 ENDC
 wKeyItemsPocketScrollPosition:: db
