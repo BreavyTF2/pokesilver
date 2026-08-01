@@ -199,7 +199,11 @@ PokemonNames::
 	dname "ブラッキー"
 	dname "ヤミカラス"
 	dname "ヤドキング"
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	dname "ムウマ"
+ELIF DEF(_09_29)
+	dname "マーベラ"
+ENDC
 	dname "アンノーン"
 	dname "ソーナンス"
 	dname "キリンリキ"
@@ -230,7 +234,11 @@ PokemonNames::
 	dname "デルビル"
 	dname "ヘルガー"
 	dname "キングドラ"
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	dname "ゴマゾウ"
+ELIF DEF(_09_29)
+	dname "マメゾウ"
+ENDC
 	dname "ドンファン"
 	dname "ポリゴン２"
 	dname "オドシシ"
