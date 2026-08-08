@@ -155,7 +155,9 @@ MapSetupScript_LinkReturn:
 	mapsetup FadeInFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	mapsetup EnableTextAcceleration
+ENDC
 	db -1 ; end
 
 MapSetupScript_Continue:

@@ -56,4 +56,6 @@ MapSetupCommands:
 	add_mapsetup ActivateMapAnims ; 29
 	add_mapsetup SuspendMapAnims ; 2a
 	add_mapsetup ApplyMapPalettes ; 2b
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 	add_mapsetup EnableTextAcceleration ; 2c
+ENDC

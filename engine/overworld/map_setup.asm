@@ -88,10 +88,12 @@ ENDC
 
 INCLUDE "data/maps/setup_script_pointers.asm"
 
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
 EnableTextAcceleration:
 	xor a
 	ld [wDisableTextAcceleration], a
 	ret
+ENDC
 
 DuplicateActivateMapAnims: ; unreferenced
 	ld a, TRUE
