@@ -4,14 +4,14 @@ ItemNames::
 	li "ハイパーボール"
 IF DEF(_09_29)
 	li "いのちのみ"
-ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	li "ひかりのこな"
 ENDC
 	li "スーパーボール"
 	li "モンスターボール"
 IF DEF(_09_29)
 	li "タウンマップ"
-ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	li "カビチュウ"
 ENDC
 	li "じてんしゃ"
@@ -65,7 +65,7 @@ ENDC
 	li "ダウジングマシン"
 IF DEF(_09_29)
 	li "ポケモンのふえ"
-ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	li "カビチュウ"
 ENDC
 	li "がくしゅうそうち"
@@ -83,7 +83,7 @@ ENDC
 	li "ふしぎなタマゴ"
 IF DEF(_09_29)
 	li "おとどけもの"
-ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	li "カビチュウ"
 ENDC
 	li "ぎんいろのはね"
@@ -115,7 +115,7 @@ ENDC
 IF DEF(_09_29)
 	li "くろおび"
 	li "しろぼんぐり"
-ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	li "しろぼんぐり"
 	li "くろおび"
 ENDC
@@ -281,7 +281,7 @@ ENDC
 	li "カビチュウ"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	assert_list_length $100 -1
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	li "？"
 	assert_list_length $100
 ENDC

@@ -253,7 +253,7 @@ MoveDescriptions::
 	dw WhirlpoolDescription
 	dw BeatUpDescription
 	assert_table_length NUM_ATTACKS
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	dw MoveFCDescription
 	dw MoveFDDescription
 	dw MoveFEDescription
@@ -305,7 +305,7 @@ ThunderpunchDescription:
 	db   "でんげきをこめた　パンチで　<KOUGEKI>"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "てき<WO>マヒさせることがある@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "てき<WO>まひさせることがある@"
 ENDC
 
@@ -409,7 +409,7 @@ BodySlamDescription:
 	db   "からだごと　たおれこんで　<KOUGEKI>"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "てき<WO>マヒさせることがある@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "てき<WO>まひさせることがある@"
 ENDC
 
@@ -589,7 +589,7 @@ StunSporeDescription:
 	db   "しびれる　こな<WO>ふりまき"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "てき<WO>マヒさせてしまう@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "てき<WO>まひさせてしまう@"
 ENDC
 
@@ -617,7 +617,7 @@ ThundershockDescription:
 	db   "でんげき<WO>あびせて　<KOUGEKI>"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "てき<WO>マヒさせることがある@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "てき<WO>まひさせることがある@"
 ENDC
 
@@ -625,7 +625,7 @@ ThunderboltDescription:
 	db   "つよいでんげき<WO>あびせて　<KOUGEKI>"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "てき<WO>マヒさせることがある@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "てき<WO>まひさせることがある@"
 ENDC
 
@@ -633,7 +633,7 @@ ThunderWaveDescription:
 	db   "よわいでんげき<WO>てき<NI>ぶつけて"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "マヒさせてしまう@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "まひさせてしまう@"
 ENDC
 
@@ -641,7 +641,7 @@ ThunderDescription:
 	db   "てき<NI>むか<TTE>　かみなり<WO>おとす"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "マヒさせることがある@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "まひさせることがある@"
 ENDC
 
@@ -785,7 +785,7 @@ LickDescription:
 	db   "ながいしたで　なめまわして　<KOUGEKI>"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "てき<WO>マヒさせることがある@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "てき<WO>まひさせることがある@"
 ENDC
 
@@ -849,7 +849,7 @@ GlareDescription:
 	db   "おなか<NO>もようで　てき<WO>いかくし"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "おびえさせて　マヒさせてしまう@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "おびえさせて　まひさせてしまう@"
 ENDC
 
@@ -1072,7 +1072,7 @@ ZapCannonDescription:
 	db   "あたりにくい<GA>ダメージ<WA>おおきい"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "あたれば　かならず　マヒさせる@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "あたれば　かならず　まひさせる@"
 ENDC
 
@@ -1144,7 +1144,7 @@ SparkDescription:
 	db   "でんき<WO>まと<TTE>　とっしんする"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	next "てき<WO>マヒさせることがある@"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	next "てき<WO>まひさせることがある@"
 ENDC
 

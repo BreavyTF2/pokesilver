@@ -100,7 +100,7 @@ Gen2ToGen1LinkComms:
 
 	ld hl, wOTPartyData
 	call Link_FindFirstNonControlCharacter_SkipZero
-IF DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_10_06) || DEF(_REV0)
 	push hl
 	ld bc, NAME_LENGTH
 	add hl, bc
@@ -412,7 +412,7 @@ Gen2ToGen2LinkComms:
 	ld hl, wOptions
 	ld a, [hl]
 	push af
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	and 1 << STEREO
 	or TEXT_DELAY_MED
 ELIF DEF(_09_29)
@@ -425,7 +425,7 @@ ENDC
 	call CopyBytes
 	call ReturnToMapFromSubmenu
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, [wDisableTextAcceleration]
 	push af
 	ld a, 1
@@ -435,7 +435,7 @@ ENDC
 	; LET'S DO THIS
 	predef StartBattle
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	pop af
 	ld [wDisableTextAcceleration], a
 ENDC
@@ -1117,7 +1117,7 @@ Link_FindFirstNonControlCharacter_AllowZero:
 InitTradeMenuDisplay:
 	call ClearTilemap
 	call LoadTradeScreenBorderGFX
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	call PlaceTradeScreenTextbox
 ELIF DEF(_09_29)
 	ld a, $3E
@@ -1349,7 +1349,7 @@ LinkTrade_TradeStatsMenu:
 	call LinkTradePlaceArrow
 	ld c, 100
 	call DelayFrames
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	farcall ValidateOTTrademon
 	jr c, .abnormal
 	farcall CheckAnyOtherAliveMonsForTrade
@@ -1459,7 +1459,7 @@ LinkTradeOTPartymonMenuCheckCancel:
 ExitLinkCommunications:
 	xor a
 	ld [wUnusedLinkCommunicationByte], a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	xor a
 	ldh [rSB], a
 	ldh [hSerialSend], a
@@ -1512,7 +1512,7 @@ LinkMonStatsScreen:
 	call LoadTradeScreenBorderGFX
 	call SetTradeRoomBGPals
 	call WaitBGMap
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	call PlaceTradeScreenTextbox
 ELIF DEF(_09_29)
 	ld a, $3E
@@ -2036,7 +2036,7 @@ SetTradeRoomBGPals:
 	call GetSGBLayout
 	jp SetDefaultBGPAndOBP
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 PlaceTradeScreenTextbox:
 	hlcoord 0, 1
 	ld b, 12
@@ -2161,7 +2161,7 @@ EnterTimeCapsule:
 	
 
 WaitForOtherPlayerToExit:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld c, 3
 	call DelayFrames
 	ld a, CONNECTION_NOT_ESTABLISHED
@@ -2251,7 +2251,7 @@ SetBitsForTimeCapsuleRequest:
 	ret
 
 WaitForLinkedFriend:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, [wPlayerLinkAction]
 	and a
 	jr z, .no_link_action
@@ -2292,7 +2292,7 @@ ENDC
 	ld a, [wLinkTimeoutFrames]
 	dec a
 	ld [wLinkTimeoutFrames], a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	jr nz, .not_done
 	ld a, [wLinkTimeoutFrames + 1]
 	dec a

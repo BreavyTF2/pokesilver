@@ -25,7 +25,7 @@ Moves:
 	move THUNDERPUNCH, EFFECT_PARALYZE_HIT,       75, ELECTRIC,     100, 15,  10
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	move SCRATCH,      EFFECT_NORMAL_HIT,         40, NORMAL,       100, 30,   0
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	move SCRATCH,      EFFECT_NORMAL_HIT,         40, NORMAL,       100, 35,   0
 ENDC
 	move VICEGRIP,     EFFECT_NORMAL_HIT,         55, NORMAL,       100, 30,   0

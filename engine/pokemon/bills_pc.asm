@@ -1880,7 +1880,7 @@ DEF MOVE_MON_FROM_PARTY_F EQU 0
 DEF MOVE_MON_TO_PARTY_F   EQU 1
 
 MovePKMNWithoutMail_InsertMon:
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	push hl
 	push de
 	push bc
@@ -1964,7 +1964,7 @@ ENDC
 
 .PartyToBox:
 	call .CopyFromParty
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	ld a, $1
 	ld [wGameLogicPaused], a
 	farcall SaveGameData
@@ -2193,7 +2193,7 @@ PCString_NoReleasingEGGS: db "タマゴを　にがすことは　できませ�
 
 _ChangeBox:
 	call LoadStandardMenuHeader
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call BillsPC_ClearTilemap
 ENDC
 .loop
@@ -2229,7 +2229,7 @@ ENDC
 	call CloseWindow
 	ret
 
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 BillsPC_ClearTilemap:
 	xor a
 	ldh [hBGMapMode], a
@@ -2397,7 +2397,7 @@ BillsPC_ChangeBoxSubmenu:
 	dec a
 	ld c, a
 	farcall PrintPCBox
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call BillsPC_ClearTilemap
 ENDC
 	and a
@@ -2424,7 +2424,7 @@ ENDC
 	farcall NamingScreen
 	call ClearTilemap
 	call LoadStandardFont
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call LoadFontsBattleExtra
 ENDC
 	ld a, [wMenuSelection]

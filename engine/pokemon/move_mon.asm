@@ -866,7 +866,7 @@ RetrieveBreedmon:
 	ld e, l
 	ld hl, MON_EXP + 2
 	add hl, bc
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	push bc
 ENDC
 	ld b, TRUE
@@ -886,7 +886,7 @@ ENDC
 	dec a
 	ld [wCurPartyMon], a
 	farcall HealPartyMon
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	ld a, [wCurPartyLevel]
 	ld d, a
 	callfar CalcExpAtLevel

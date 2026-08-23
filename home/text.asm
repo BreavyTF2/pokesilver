@@ -426,7 +426,7 @@ LineChar::
 
 Paragraph::
 	push de
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, [wLinkMode]
 	cp LINK_COLOSSEUM
 	jr z, .linkbattle
@@ -447,7 +447,7 @@ ENDC
 	jp NextChar
 
 _ContText::
-IF DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_10_06) || DEF(_REV0)
 	ld a, [wLinkMode]
 	cp LINK_COLOSSEUM
 	jr z, .communication

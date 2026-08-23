@@ -177,7 +177,7 @@ sBackupCurMapData::  ds wCurMapDataEnd - wCurMapData
 sBackupPokemonData:: ds wPokemonDataEnd - wPokemonData
 sBackupGameDataEnd::
 
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 
 	ds $81
 sBackupChecksum:: dw

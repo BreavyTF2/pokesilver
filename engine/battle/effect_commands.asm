@@ -1067,7 +1067,7 @@ BattleCommand_DoTurn:
 	cp EFFECT_FLY
 	jr z, .print
 
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	cp EFFECT_ROLLOUT
 	jr z, .print
 
@@ -5773,7 +5773,7 @@ BattleCommand_FinishConfusingTarget:
 
 	call GetOpponentItem
 	ld a, b
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	cp HELD_HEAL_STATUS
 	jr z, .heal_confusion
 ENDC

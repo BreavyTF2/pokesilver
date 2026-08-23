@@ -72,7 +72,7 @@ StartMenu::
 	dw .ReturnRedraw
 
 .Exit:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ldh a, [hOAMUpdate]
 	push af
 	ld a, 1

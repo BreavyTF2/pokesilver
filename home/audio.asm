@@ -398,7 +398,7 @@ SpecialMapMusic::
 	ld a, [wPlayerState]
 	cp PLAYER_SURF
 	jr z, .surf
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp PLAYER_SURF_PIKA
 	jr z, .surf
 ENDC

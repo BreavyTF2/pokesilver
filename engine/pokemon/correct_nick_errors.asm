@@ -68,7 +68,7 @@ CorrectNickErrors::
 	db 'ド' + 1,   'バ'
 	db 'ボ' + 1,   'が'
 	db 'ど' + 1,   'ば'
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	db 'ぼ' + 1,   'パ'
 	db 'ぽ' + 1,   '<TRAINER>'
 ENDC

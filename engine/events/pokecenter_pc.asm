@@ -254,7 +254,7 @@ _PlayersPC:
 	ret
 
 .PlayersPC:
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	xor a
 	ld [wPCItemsCursor], a
 	ld [wPCItemsScrollPosition], a
@@ -514,7 +514,7 @@ PlayerDepositItemMenu:
 	ret
 
 .tossable
-IF DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_10_06) || DEF(_REV0)
 	ld a, [wPCItemQuantityChange]
 	push af
 	ld a, [wPCItemQuantity]
@@ -549,7 +549,7 @@ ENDC
 	jr c, .DeclinedToDeposit
 
 .ContinueDeposit:
-IF DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_10_06) || DEF(_REV0)
 	ld a, [wItemQuantityChange]
 	ld [wPCItemQuantityChange], a
 	ld a, [wCurItemQuantity]

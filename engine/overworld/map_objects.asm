@@ -2135,7 +2135,7 @@ CopyTempObjectData:
 	ret
 
 UpdateAllObjectsFrozen::
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, [wStateFlags]
 	bit SPRITE_UPDATES_DISABLED_F, a
 	ret z
@@ -2885,7 +2885,7 @@ InitSprites:
 	ld a, [hl]
 	cp STANDING
 	jp z, .done
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp NUM_FACINGS
 	jp nc, .done
 ENDC

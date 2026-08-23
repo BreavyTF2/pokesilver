@@ -88,7 +88,7 @@ ENDC
 
 INCLUDE "data/maps/setup_script_pointers.asm"
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 EnableTextAcceleration:
 	xor a
 	ld [wDisableTextAcceleration], a
@@ -184,7 +184,7 @@ CheckUpdatePlayerSprite::
 .CheckSurfing:
 	call CheckOnWater
 	jr nz, .nope2
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	ld a, [wPlayerState]
 	cp PLAYER_SURF
 	jr z, .is_surfing

@@ -33,7 +33,7 @@ CheckForLuckyNumberWinners:
 	cp EGG
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	call z, .SkipOpenBoxMon
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	jr z, .SkipOpenBoxMon
 ENDC
 	call .CompareLuckyNumberToMonID

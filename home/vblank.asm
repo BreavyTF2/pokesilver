@@ -175,7 +175,7 @@ VBlank_Cutscene::
 	xor a
 	ld [wVBlankOccurred], a
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; get requested ints
 	ldh a, [rIF]
 	ld b, a
@@ -186,7 +186,7 @@ ENDC
 	; enable lcd stat
 	ld a, IE_STAT
 	ldh [rIE], a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; rerequest serial int if applicable (still disabled)
 	; request lcd stat
 	ld a, b
@@ -203,7 +203,7 @@ ENDC
 	rst Bankswitch
 
 	di
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; get requested ints
 	ldh a, [rIF]
 	ld b, a
@@ -214,7 +214,7 @@ ENDC
 	; enable ints
 	ld a, IE_DEFAULT
 	ldh [rIE], a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; restore requested ints
 	ld a, b
 	ldh [rIF], a

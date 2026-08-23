@@ -1151,7 +1151,7 @@ DeleteSaveData:
 	call GetMemSGBLayout
 	call LoadStandardFont
 	call LoadFontsExtra
-IF DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_10_06) || DEF(_REV0)
 	ld de, MUSIC_MAIN_MENU
 	call PlayMusic
 ENDC

@@ -34,7 +34,7 @@ Facings:
 	dw FacingGrass1
 	dw FacingGrass2
 	assert_table_length NUM_FACINGS
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	dw 0 ; end
 ENDC
 

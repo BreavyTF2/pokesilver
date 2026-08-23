@@ -708,7 +708,7 @@ DayCare_InitBreeding:
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	ld [de], a
 	inc de
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	ld [hli], a
 ENDC
 	dec b

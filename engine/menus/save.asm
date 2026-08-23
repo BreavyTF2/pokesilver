@@ -4,7 +4,7 @@ SaveMenu:
 	farcall DisplayNormalContinueData
 	call SpeechTextbox
 	call UpdateSprites
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	farcall SaveMenu_CopyTilemapAtOnce
 ELIF DEF(_09_29)
 	call CGBOnly_CopyTilemapAtOnce
@@ -24,7 +24,7 @@ ENDC
 .refused
 	call ExitMenu
 	call ReloadPalettes
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	farcall SaveMenu_CopyTilemapAtOnce
 ELIF DEF(_09_29)
 	call CGBOnly_CopyTilemapAtOnce
@@ -35,7 +35,7 @@ ENDC
 SaveAfterLinkTrade:
 	call PauseGameLogic
 	farcall StageRTCTimeForSave
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	farcall BackupMysteryGift
 ENDC
 	call SavePokemonData
@@ -105,7 +105,7 @@ MoveMonWOMail_InsertMon_SaveGame:
 	ld a, TRUE
 	ld [wSaveFileExists], a
 	farcall StageRTCTimeForSave
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	farcall BackupMysteryGift
 ENDC
 	call ValidateSave
@@ -213,7 +213,7 @@ AskOverwriteSaveFile:
 	ret
 
 SaveTheGame_yesorno:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld b, BANK(WouldYouLikeToSaveTheGameText)
 ENDC
 	call MapTextbox
@@ -294,7 +294,7 @@ _SaveGameData:
 	ld a, TRUE
 	ld [wSaveFileExists], a
 	farcall StageRTCTimeForSave
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	farcall BackupMysteryGift
 ENDC
 	call ValidateSave
@@ -463,7 +463,7 @@ IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	ld bc, sBrokenBackupGameDataEnd - sBrokenBackupGameData
 	ld a, BANK(sBrokenBackupGameData)
 
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	ld hl, sBackupGameData
 	ld bc, sBackupGameDataEnd - sBackupGameData
 	ld a, BANK(sBackupGameData)
@@ -485,7 +485,7 @@ TryLoadSaveFile:
 	call LoadBox
 	farcall RestorePartyMonMail
 	farcall RestoreMysteryGift
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call ValidateBackupSave
 	call SaveBackupOptions
 	call SaveBackupPlayerData
@@ -551,7 +551,7 @@ IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	call OpenSRAM
 	ld hl, sBrokenBackupPlayerData + wStartDay - wPlayerData
 
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	ld a, BANK(sBackupPlayerData)
 	call OpenSRAM
 	ld hl, sBackupPlayerData + wStartDay - wPlayerData

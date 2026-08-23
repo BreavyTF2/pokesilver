@@ -349,7 +349,7 @@ HandleBerserkGene:
 	set SUBSTATUS_CONFUSED, [hl]
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	farcall BattleCommand_AttackUp2
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	ld a, BATTLE_VARS_MOVE_ANIM
 	call GetBattleVarAddr
 	push hl
@@ -2331,7 +2331,7 @@ WinTrainerBattle:
 	and a
 	call nz, DoubleReward
 	call CheckMaxedOutMomMoney
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	push af
 ENDC
 	ld a, FALSE
@@ -2367,7 +2367,7 @@ ENDC
 	call DoubleReward
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	call CheckMaxedOutMomMoney
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	pop af
 ENDC
 	jr nc, .KeepItAll
@@ -2439,7 +2439,7 @@ CheckMaxedOutMomMoney:
 	sbc HIGH(MAX_MONEY >> 8)
 	ret
 
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 INCLUDE "engine/battle/add_battle_money.asm"
 ENDC
 
@@ -4175,12 +4175,12 @@ UseHeldStatusHealingItem:
 	ld hl, CalcPlayerStats
 
 .got_pointer
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call SwitchTurnCore
 ENDC
 	ld a, BANK(CalcPlayerStats) ; aka BANK(CalcEnemyStats)
 	rst FarCall
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call SwitchTurnCore
 ENDC
 	call ItemRecoveryAnim
@@ -4362,7 +4362,7 @@ DrawPlayerHUD:
 	; HP bar
 	hlcoord 10, 9
 	ld b, 1
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	xor a ; PARTYMON
 	ld [wMonType], a
 ENDC
@@ -4936,7 +4936,7 @@ ENDC
 	call CloseWindow
 	call GetMemSGBLayout
 	call SetDefaultBGPAndOBP
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	ld a, [wCurPartyMon]
 	ld [wCurBattleMon], a
 ENDC
@@ -8165,7 +8165,7 @@ IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	dec hl
 	dec c
 	jr nz, .loop
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	call AddBattleMoneyToAccount
 ENDC
 	ld hl, BattleText_PlayerPickedUpPayDayMoney
@@ -8537,7 +8537,7 @@ AddLastLinkBattleToLinkRecord:
 	ld bc, (sLinkBattleRecord1Draws - sLinkBattleRecord1) + 1
 .okay
 	add hl, bc
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call .CheckOverflow
 	ret nc
 ENDC
@@ -8553,7 +8553,7 @@ IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 ENDC
 	ret
 
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 .CheckOverflow:
 	dec hl
 	ld a, [hl]

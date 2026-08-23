@@ -36,7 +36,7 @@ Serial::
 
 .establish_connection
 	ldh a, [rSB]
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp USING_EXTERNAL_CLOCK
 	jr z, .player1
 	cp USING_INTERNAL_CLOCK
@@ -278,7 +278,7 @@ Serial_PlaceWaitingTextAndSyncAndExchangeNybble::
 	call WaitLinkTransfer
 	jp SafeLoadTempTilemapToTilemap
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 Serial_SyncAndExchangeNybble:: ; unreferenced
 	call LoadTilemapToTempTilemap
 	callfar PlaceWaitingText
@@ -335,7 +335,7 @@ LinkTransfer::
 	push bc
 	ld b, SERIAL_TIMECAPSULE
 	ld a, [wLinkMode]
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp LINK_TIMECAPSULE
 	jr z, .got_high_nybble
 	ld b, SERIAL_TIMECAPSULE

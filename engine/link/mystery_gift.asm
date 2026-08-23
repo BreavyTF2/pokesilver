@@ -65,7 +65,7 @@ ENDC
 	hlcoord 2, 8
 	ld a, d
 	ld de, .MysteryGiftCanceledText ; Link has been canceled
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp MG_CANCELED
 	jp z, .LinkCanceled
 	cp MG_OKAY
@@ -188,7 +188,7 @@ ENDC
 	prompt
 
 .MysteryGiftOneADayText:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	text "ふしぎなおくりものは　おなじひとから"
 	line "１にち　１かいしか　うけとれません！"
 ELIF DEF(_09_29)
@@ -1136,7 +1136,7 @@ UnlockMysteryGift:
 ; [sMysteryGiftUnlocked] and [sMysteryGiftItem] to 0.
 	call GetMysteryGiftBank
 	ld hl, sMysteryGiftUnlocked
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, [hl]
 	inc a
 	jr nz, .ok

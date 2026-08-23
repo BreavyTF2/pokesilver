@@ -628,7 +628,7 @@ BetaCaveTestMap_Blocks: ; unreferenced
 MountMortar1FOutside_Blocks:
 	INCBIN "maps/MountMortar1FOutside.blk"
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 MountMortar1FInside_Blocks:
 	INCBIN "maps/MountMortar1FInside.blk"
 ELIF DEF (_09_29)

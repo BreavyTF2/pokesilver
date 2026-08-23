@@ -624,7 +624,7 @@ Credits_TheEnd:
 CreditsBorderGFX:    INCBIN "gfx/credits/border.2bpp"
 
 CreditsMonsGFX: ; used only for BANK(CreditsMonsGFX)
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 CreditsBellossomGFX: INCBIN "gfx/credits/bellossom.2bpp"
 CreditsTogepiGFX:    INCBIN "gfx/credits/togepi.2bpp"
 CreditsElekidGFX:    INCBIN "gfx/credits/elekid.2bpp"

@@ -11,7 +11,7 @@ CanLearnTMHMMove:
 	ld hl, TMHMMoves
 .loop
 	ld a, [hli]
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	and a
 	jr z, .end
 ENDC
@@ -29,7 +29,7 @@ ENDC
 	pop de
 	ret
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 .end
 	pop hl
 	ld c, 0

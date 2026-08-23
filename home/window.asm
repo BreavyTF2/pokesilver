@@ -80,7 +80,7 @@ ENDC
 	ldh a, [hBGMapMode]
 	push af
 	xor a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ldh [hBGMapMode], a
 	ld a, $1
 	ldh [hOAMUpdate], a

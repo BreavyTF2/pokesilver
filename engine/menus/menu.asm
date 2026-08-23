@@ -538,7 +538,7 @@ IF DEF(_DEBUG)
 	ld a, l
 	cpl
 	ld l, a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, 1
 	add l
 	ld l, a

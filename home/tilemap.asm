@@ -70,7 +70,7 @@ CopyTilemapAtOnce::
 
 .wait
 	ldh a, [rLY]
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp $80 - 1
 ELIF DEF(_09_29)
 	cp $60
@@ -86,7 +86,7 @@ ELIF DEF(_09_29)
 	ldh [rVBK], a
 	hlcoord 0, 0
 	call .CopyBGMapViaStack
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 .wait2
 	ldh a, [rLY]
 	cp $80 - 1
@@ -102,7 +102,7 @@ ENDC
 
 .CopyBGMapViaStack:
 ; Copy all tiles to vBGMap
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld [hSPBuffer], sp
 	ld sp, hl
 ENDC
@@ -111,7 +111,7 @@ ENDC
 	ld l, 0
 
 	ld a, SCREEN_HEIGHT
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ldh [hTilesPerCycle], a
 ELIF DEF(_09_29)
 .next:
@@ -119,11 +119,11 @@ ELIF DEF(_09_29)
 	ld c, SCREEN_WIDTH
 ENDC
 	ld b, STAT_BUSY
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld c, LOW(rSTAT)
 ENDC
 .loop
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 rept SCREEN_WIDTH / 2
 	pop de
 ; wait until PPU v/hblank mode

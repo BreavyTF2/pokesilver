@@ -36,7 +36,7 @@ SECTION "Map Scripts 2", ROMX
 
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 INCLUDE "maps/Route3.asm"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 INCLUDE "maps/Route4.asm"
 ENDC
 INCLUDE "maps/GoldenrodUnderground.asm"
@@ -413,7 +413,7 @@ INCLUDE "maps/LavenderTown.asm"
 INCLUDE "maps/Route5.asm"
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 INCLUDE "maps/Route4.asm"
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 INCLUDE "maps/Route3.asm"
 ENDC
 INCLUDE "maps/Route10South.asm"

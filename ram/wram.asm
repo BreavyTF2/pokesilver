@@ -137,7 +137,7 @@ wPrinterOpcode:: db
 wPrevDexEntry:: db
 wDisableTextAcceleration:: db
 
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 wPCItemsCursor:: db
 wPCItemsScrollPosition:: db
 ENDC

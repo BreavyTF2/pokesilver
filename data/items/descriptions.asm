@@ -259,7 +259,7 @@ ItemDescriptions:
 	dw TeruSama37Desc
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	assert_table_length $100 - 1
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	dw TeruSama37Desc
 	assert_table_length $100
 ENDC
@@ -273,7 +273,7 @@ UltraBallDesc:
 	next "つかまえること<GA>できる　ボール@"
 
 BrightpowderDesc:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	db   "もたせると　ひかりで　まどわし"
 	next "あいて<NO>めいちゅうりつ<WO>さげる@"
 ELIF DEF(_09_29)
@@ -289,7 +289,7 @@ PokeBallDesc:
 	db   "#<WO>つかまえるため<NO>どうぐ@"
 
 TeruSama1Desc:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	db   "？@"
 ELIF DEF(_09_29)
 	db "マップ<WO>みること<GA>できる@"

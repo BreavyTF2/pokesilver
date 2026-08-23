@@ -47,7 +47,7 @@ Init::
 
 	ld a, %100 ; Start timer at 4096Hz
 	ldh [rTAC], a
-IF DEF(_10_06) || DEF(_REV0) || DEF(_REV1)
+IF DEF(_10_06) || DEF(_REV0)
 .wait
 	ldh a, [rLY]
 	cp LY_VBLANK + 1

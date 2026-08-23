@@ -830,7 +830,7 @@ IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	call CopyBytes
 	ld a, 1
 	ldh [hCGBPalUpdate], a
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	ld a, BGPI_AUTOINC
 	ldh [rBGPI], a
 	ld c, 4 * TILE_WIDTH

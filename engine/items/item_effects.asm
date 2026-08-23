@@ -60,7 +60,7 @@ ItemEffects:
 	dw DireHitEffect       ; DIRE_HIT
 IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
 	dw BitterBerryEffect   ; ITEM_2D
-ELIF DEF(_REV0) || DEF(_REV1)
+ELIF DEF(_REV0)
 	dw NoEffect            ; ITEM_2D
 ENDC
 	dw RestoreHPEffect     ; FRESH_WATER
@@ -632,7 +632,7 @@ ENDC
 	ld a, FRIEND_BALL_HAPPINESS
 	ld [sBoxMon1Happiness], a
 .SkipBoxMonFriendBall:
-IF DEF(_REV0) || DEF(_REV1)
+IF DEF(_REV0)
 	call CloseSRAM
 ENDC
 
