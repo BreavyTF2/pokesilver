@@ -1,29 +1,3 @@
-IF DEF(_09_29)
-Unreferenced_PlaceString::
-		push hl
-Unreferenced_PlaceNextChar:	
-		ld a, [de]
-		inc de
-		cp '@'
-		jr z, .endtext
-		cp '<NEXT>'
-		jr z, .next_row
-		ldi [hl], a
-		jr Unreferenced_PlaceNextChar
-	
-.next_row:	
-		pop hl
-		push de
-		ld de, SCREEN_WIDTH
-		add hl, de
-		pop de
-		jr Unreferenced_PlaceString
-	
-.endtext:
-		pop hl
-		ret
-ENDC
-
 ClearBox::
 ; Fill a c*b box at hl with blank tiles.
 	ld a, '　'
@@ -426,11 +400,9 @@ LineChar::
 
 Paragraph::
 	push de
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, [wLinkMode]
 	cp LINK_COLOSSEUM
 	jr z, .linkbattle
-ENDC
 	call LoadBlinkingCursor
 
 .linkbattle

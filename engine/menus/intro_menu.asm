@@ -909,32 +909,19 @@ ENDC
 DEF NUM_TITLESCREENOPTIONS EQU const_value
 
 IntroSequence:
-IF !DEF(_UTILITY)
 	callfar SplashScreen
 	jr c, StartTitleScreen
-	IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	ld a, [wBetaTitleSequenceOpeningType]
 	and a
 	jr z, .dummy
 ; code was probably dummied out here
 .dummy
-	ENDC
+ENDC
 	callfar GoldSilverIntro
 
 	; fallthrough
-ELSE
-	call ClearBGPalettes
-	call ClearTilemap
-	ld a, HIGH(vBGMap0)
-	ldh [hBGMapAddress + 1], a
-	xor a ; LOW(vBGMap0)
-	ldh [hBGMapAddress], a
-	ldh [hJoyDown], a
-	ldh [hSCX], a
-	ldh [hSCY], a
-	ld a, SCREEN_HEIGHT_PX
-	ldh [hWY], a
-ENDC
+
 StartTitleScreen:
 	call TitleScreen
 	call DelayFrame
@@ -943,9 +930,6 @@ StartTitleScreen:
 	call RunTitleScreen
 	jr nc, .loop
 	
-IF DEF(_UTILITY)
-	jp DebugMenu
-ELSE
 	call ClearSprites
 	call ClearBGPalettes
 
@@ -978,13 +962,10 @@ IF DEF(_DEBUG)
 ELSE
 	dw IntroSequence
 ENDC
-ENDC
+
 INCLUDE "engine/movie/title.asm"
 
-
 RunTitleScreen:
-
-IF !DEF(_UTILITY)
 	call ScrollTitleScreenClouds
 	ld a, [wJumptableIndex]
 	bit JUMPTABLE_EXIT_F, a
@@ -1240,23 +1221,8 @@ ENDM
 	trail_coords  0,  0, 11, 15
 	trail_coords  0,  0, 11, 11
 ENDC
-ELSE
-	call JoyTextDelay
-	ld hl, hJoyLast
-	ld a, [hl]
-	and B_PAD_B
-	jr nz, .carry
-	call DelayFrame
-	and a
-	ret
-	
-.carry:
-	scf
-	ret
-ENDC
 
 Copyright:
-IF !DEF(_UTILITY)
 	call ClearTilemap
 	call LoadFontsExtra
 	ld de, CopyrightGFX
@@ -1269,7 +1235,6 @@ IF !DEF(_UTILITY)
 
 CopyrightString:
 INCLUDE "data/copyright.asm"
-ENDC
 
 GameInit::
 	call ClearWindowData

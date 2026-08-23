@@ -72,15 +72,11 @@ HDMATransferTilemapAndAttrmap_Menu::
 	ret
 
 SafeUpdateSprites::
-IF DEF(_09_29)
-	call UpdateSprites
-ENDC
 	ldh a, [hOAMUpdate]
 	push af
 	ldh a, [hBGMapMode]
 	push af
 	xor a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ldh [hBGMapMode], a
 	ld a, $1
 	ldh [hOAMUpdate], a
@@ -89,10 +85,6 @@ IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 
 	xor a
 	ldh [hOAMUpdate], a
-ELIF DEF(_09_29)
-	ldh [hOAMUpdate], a
-	ldh [hBGMapMode], a
-ENDC
 	call DelayFrame
 	pop af
 	ldh [hBGMapMode], a

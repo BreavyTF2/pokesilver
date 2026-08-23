@@ -2,8 +2,7 @@ roms := \
 	pokegold.gbc \
 	pokesilver.gbc \
 	pokesilver_10_06_debug.gbc \
-	pokegold_09_30.gbc \
-	pokegold_09_29.gbc
+	pokegold_09_30.gbc
 
 rom_obj := \
 	audio.o \
@@ -29,13 +28,11 @@ gold_excl_obj               := $(addsuffix _gold.o,$(gs_excl_asm))
 silver_excl_obj             := $(addsuffix _silver.o,$(gs_excl_asm))
 silver_10_06_debug_excl_obj := $(addsuffix _silver_10_06_debug.o,$(gs_excl_asm))
 gold_09_30_excl_obj         := $(addsuffix _gold_09_30.o,$(gs_excl_asm))
-gold_09_29_excl_obj         := $(addsuffix _gold_09_29.o,$(gs_excl_asm))
 
 pokegold_obj               := $(rom_obj:.o=_gold.o) $(gold_excl_obj)
 pokesilver_obj             := $(rom_obj:.o=_silver.o) $(silver_excl_obj)
 pokesilver_10_06_debug_obj := $(rom_obj:.o=_silver_10_06_debug.o) $(silver_10_06_debug_excl_obj)
 pokegold_09_30_obj         := $(rom_obj:.o=_gold_09_30.o) $(gold_09_30_excl_obj)
-pokegold_09_29_obj         := $(rom_obj:.o=_gold_09_29.o) $(gold_09_29_excl_obj)
 
 
 ### Build tools
@@ -70,7 +67,6 @@ RGBGFXFLAGS  ?= -Weverything
 	silver \
 	silver_10_06_debug \
 	gold_09_30 \
-	gold_09_29 \
 	clean \
 	tidy \
 	compare \
@@ -81,7 +77,6 @@ gold:               pokegold.gbc
 silver:             pokesilver.gbc
 silver_10_06_debug: pokesilver_10_06_debug.gbc
 gold_09_30:         pokegold_09_30.gbc
-gold_09_29:         pokegold_09_29.gbc
 
 clean: tidy
 	find gfx \
@@ -106,7 +101,6 @@ tidy:
 	      $(pokesilver_obj) \
 	      $(pokesilver_10_06_debug_obj) \
 	      $(pokegold_09_30_obj) \
-	      $(pokegold_09_29_obj) \
 	      rgbdscheck.o
 	$(MAKE) clean -C tools/
 
@@ -127,7 +121,6 @@ $(pokegold_obj):               RGBASMFLAGS += -D _GOLD -D _REV0
 $(pokesilver_obj):             RGBASMFLAGS += -D _SILVER -D _REV0
 $(pokesilver_10_06_debug_obj): RGBASMFLAGS += -D _SILVER -D _10_06 -D _DEBUG
 $(pokegold_09_30_obj):         RGBASMFLAGS += -D _GOLD -D _09_30
-$(pokegold_09_29_obj):         RGBASMFLAGS += -D _GOLD -D _09_29 -D _DEBUG -D _UTILITY
 
 rgbdscheck.o: rgbdscheck.asm
 	$(RGBASM) -o $@ $<
@@ -156,8 +149,6 @@ $(foreach obj, $(filter-out $(silver_10_06_debug_excl_obj), $(pokesilver_10_06_d
 	$(eval $(call DEP,$(obj),$(obj:_silver_10_06_debug.o=.asm))))
 $(foreach obj, $(filter-out $(gold_09_30_excl_obj), $(pokegold_09_30_obj)), \
 	$(eval $(call DEP,$(obj),$(obj:_gold_09_30.o=.asm))))
-$(foreach obj, $(filter-out $(gold_09_29_excl_obj), $(pokegold_09_29_obj)), \
-	$(eval $(call DEP,$(obj),$(obj:_gold_09_29.o=.asm))))
 	
 # Dependencies for game-exclusive objects (keep _gold and _silver in asm file basenames)
 $(foreach obj, $(gold_excl_obj) $(silver_excl_obj), \
@@ -166,8 +157,6 @@ $(foreach obj, $(silver_10_06_debug_excl_obj), \
 	$(eval $(call DEP,$(obj),$(obj:_silver_10_06_debug.o=_silver.asm))))
 $(foreach obj, $(gold_09_30_excl_obj), \
 	$(eval $(call DEP,$(obj),$(obj:_gold_09_30.o=_gold.asm))))
-$(foreach obj, $(gold_09_29_excl_obj), \
-	$(eval $(call DEP,$(obj),$(obj:_gold_09_29.o=_gold.asm))))
 
 endif
 
@@ -177,7 +166,6 @@ pokegold.gbc:               RGBFIXFLAGS += -n 0 -t POKEMON_GLD -i AAUJ
 pokesilver.gbc:             RGBFIXFLAGS += -n 0 -t POKEMON_SLV -i AAXJ
 pokesilver_10_06_debug.gbc: RGBFIXFLAGS += -n 0 -t POKEMON_SLV -i AAXJ
 pokegold_09_30.gbc:         RGBFIXFLAGS += -n 0 -t POKEMON_GLD -i AAUJ
-pokegold_09_29.gbc:         RGBFIXFLAGS += -n 0 -t POKEMON_GLD -i AAUJ
 
 %.gbc: $$(%_obj) layout.link
 	$(RGBLINK) $(RGBLINKFLAGS) -l layout.link -n $*.sym -m $*.map -o $@ $(filter %.o,$^)

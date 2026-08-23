@@ -1056,7 +1056,7 @@ INCBIN "gfx/debug/color_test.2bpp"
 TilesetColorPicker: ; unreferenced
 ; A debug menu to test tileset palettes at runtime.
 ; dummied out in retail
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	ldh a, [hCGB]
 	and a
 	ret z

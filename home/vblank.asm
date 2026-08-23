@@ -175,24 +175,20 @@ VBlank_Cutscene::
 	xor a
 	ld [wVBlankOccurred], a
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; get requested ints
 	ldh a, [rIF]
 	ld b, a
-ENDC
 	; discard requested ints
 	xor a
 	ldh [rIF], a
 	; enable lcd stat
 	ld a, IE_STAT
 	ldh [rIE], a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; rerequest serial int if applicable (still disabled)
 	; request lcd stat
 	ld a, b
 	and IF_SERIAL
 	or IF_STAT
-ENDC
 	ldh [rIF], a
 
 	ei
@@ -203,22 +199,18 @@ ENDC
 	rst Bankswitch
 
 	di
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; get requested ints
 	ldh a, [rIF]
 	ld b, a
 	; discard requested ints
-ENDC
 	xor a
 	ldh [rIF], a
 	; enable ints
 	ld a, IE_DEFAULT
 	ldh [rIE], a
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	; restore requested ints
 	ld a, b
 	ldh [rIF], a
-ENDC
 	ret
 
 UpdatePals::
@@ -333,87 +325,7 @@ VBlank_SoundOnly::
 	xor a
 	ld [wVBlankOccurred], a
 	ret
-IF DEF(_09_29)
-VBlank_Unreferenced:
-	ld hl, hVBlankCounter
-	inc [hl]
-	; advance random variables
-	ldh a, [rDIV]
-	ld b, a
-	ldh a, [hRandomAdd]
-	adc b
-	ldh [hRandomAdd], a
-	ld b, a
-	ldh a, [hRandomSub]
-	sbc a, b
-	ldh [hRandomSub], a
 
-	ldh a, [hROMBank]
-	ld [wROMBankBackup], a
-	ldh a, [hSCX]
-	ldh [rSCX], a
-	ldh a, [hSCY]
-	ldh [rSCY], a
-	ldh a, [hWY]
-	ldh [rWY], a
-	ldh a, [hWX]
-	ldh [rWX], a
-
-	; There's only time to call one of these in one vblank.
-	; Calls are in order of priority.
-
-	call UpdateBGMapBuffer
-	jr c, .done
-	call UpdatePalsIfCGB
-	jr c, .done
-	call UpdateBGMap
-
-
-	; These have their own timing checks.
-
-	call Serve2bppRequest
-	call Serve1bppRequest
-	call FillBGMap0WithBlack
-.done
-
-	ldh a, [hOAMUpdate]
-	and a
-	jr nz, .done_oam
-	call hTransferShadowOAM
-.done_oam
-
-	; vblank-sensitive operations are done
-
-	xor a
-	ld [wVBlankOccurred], a
-
-	ld a, [wOverworldDelay]
-	and a
-	jr z, .ok
-	dec a
-	ld [wOverworldDelay], a
-.ok
-
-	ld a, [wTextDelayFrames]
-	and a
-	jr z, .ok2
-	dec a
-	ld [wTextDelayFrames], a
-.ok2
-
-	call $922
-	ld a, $3A
-	rst $10	; Bankswitch
-
-	call _UpdateSound
-	ld a, [wROMBankBackup]	; wROMBankBackup = $D147
-
-	rst $10	; Bankswitch
-
-	ldh a, [hSeconds]	; hSeconds = $FF9A
-	ldh [hUnusedBackup], a	; hUnusedBackup = $FFE5
-	ret
-ENDC
 VBlank_Unused::
 ; scx, scy
 ; palettes

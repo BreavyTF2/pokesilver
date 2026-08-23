@@ -174,7 +174,7 @@ HallOfFamePC:
 	and a
 	ret
 
-IF DEF(_09_29) || DEF(_09_30)
+IF DEF(_09_30)
 Old_OaksPC:
 	ld hl, .TooManyConnectionsText
 	call MenuTextboxBackup
@@ -524,7 +524,7 @@ IF DEF(_10_06) || DEF(_REV0)
 	ld [wPCItemQuantity], a
 	pop af
 	ld [wPCItemQuantityChange], a
-ELIF DEF(_09_29) || DEF(_09_30)
+ELIF DEF(_09_30)
 	call .DepositItem
 ENDC
 	ret
@@ -567,7 +567,7 @@ IF DEF(_10_06) || DEF(_REV0)
 	ld hl, .PlayersPCDepositItemsText
 	call PrintText
 	ret
-ELIF DEF(_09_29) || DEF(_09_30)
+ELIF DEF(_09_30)
 	ld hl, wNumItems
 	ld a, [wCurItemQuantity]
 	call TossItem
@@ -583,7 +583,7 @@ ENDC
 .NoRoomInPC:
 	ld hl, .PlayersPCNoRoomDepositText
 	call PrintText
-IF DEF(_09_29) || DEF(_09_30)
+IF DEF(_09_30)
 	ld hl, wNumItems
 	call ReceiveItem
 ENDC

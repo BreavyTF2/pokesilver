@@ -2135,11 +2135,9 @@ CopyTempObjectData:
 	ret
 
 UpdateAllObjectsFrozen::
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld a, [wStateFlags]
 	bit SPRITE_UPDATES_DISABLED_F, a
 	ret z
-ENDC
 	ld bc, wObjectStructs
 	xor a
 .loop
@@ -2885,10 +2883,8 @@ InitSprites:
 	ld a, [hl]
 	cp STANDING
 	jp z, .done
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp NUM_FACINGS
 	jp nc, .done
-ENDC
 	ld l, a
 	ld h, 0
 	add hl, hl

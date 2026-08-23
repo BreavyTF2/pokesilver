@@ -23,7 +23,7 @@ Moves:
 	move FIRE_PUNCH,   EFFECT_BURN_HIT,           75, FIRE,         100, 15,  10
 	move ICE_PUNCH,    EFFECT_FREEZE_HIT,         75, ICE,          100, 15,  10
 	move THUNDERPUNCH, EFFECT_PARALYZE_HIT,       75, ELECTRIC,     100, 15,  10
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	move SCRATCH,      EFFECT_NORMAL_HIT,         40, NORMAL,       100, 30,   0
 ELIF DEF(_REV0)
 	move SCRATCH,      EFFECT_NORMAL_HIT,         40, NORMAL,       100, 35,   0

@@ -58,7 +58,7 @@ ReadMapSetupScript:
 	pop hl
 	jr .loop
 
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 FarCall_hl_copy: ; unreferenced
 	ld [wTempBank], a
 	ldh a, [hROMBank]
@@ -88,12 +88,10 @@ ENDC
 
 INCLUDE "data/maps/setup_script_pointers.asm"
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 EnableTextAcceleration:
 	xor a
 	ld [wDisableTextAcceleration], a
 	ret
-ENDC
 
 DuplicateActivateMapAnims: ; unreferenced
 	ld a, TRUE

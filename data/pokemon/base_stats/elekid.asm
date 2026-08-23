@@ -7,7 +7,7 @@
 	db 45 ; catch rate
 	db 106 ; base exp
 	db NO_ITEM, NO_ITEM ; items
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	db GENDER_F50 ; gender ratio
 ELIF DEF(_REV0)
 	db GENDER_F25 ; gender ratio

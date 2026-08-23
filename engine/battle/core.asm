@@ -347,7 +347,7 @@ HandleBerserkGene:
 	call GetBattleVarAddr
 	push af
 	set SUBSTATUS_CONFUSED, [hl]
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	farcall BattleCommand_AttackUp2
 ELIF DEF(_REV0)
 	ld a, BATTLE_VARS_MOVE_ANIM
@@ -2365,7 +2365,7 @@ ENDC
 .done
 	call DoubleReward
 	call DoubleReward
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	call CheckMaxedOutMomMoney
 ELIF DEF(_REV0)
 	pop af
@@ -2405,7 +2405,7 @@ ENDC
 	pop bc
 	ret
 
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 INCLUDE "engine/battle/add_battle_money.asm"
 ENDC
 
@@ -4923,7 +4923,7 @@ TryPlayerSwitch:
 	jp z, BattleMenuPKMN_Loop
 	ld a, [wCurBattleMon]
 	ld [wLastPlayerMon], a
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	ld a, [wCurPartyMon]
 	ld [wCurBattleMon], a
 ENDC
@@ -8154,7 +8154,7 @@ CheckPayDay:
 .okay
 	ld hl, wPayDayMoney + 2
 	ld de, wMoney + 2
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	ld c, 3
 	and a
 .loop
@@ -8545,7 +8545,7 @@ ENDC
 	ret nz
 	dec hl
 	inc [hl]
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	ret nz
 	ld a, $ff
 	ld [hli], a

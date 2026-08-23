@@ -4,11 +4,7 @@ SaveMenu:
 	farcall DisplayNormalContinueData
 	call SpeechTextbox
 	call UpdateSprites
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	farcall SaveMenu_CopyTilemapAtOnce
-ELIF DEF(_09_29)
-	call CGBOnly_CopyTilemapAtOnce
-ENDC
 	ld hl, WouldYouLikeToSaveTheGameText
 	call SaveTheGame_yesorno
 	jr nz, .refused
@@ -24,11 +20,7 @@ ENDC
 .refused
 	call ExitMenu
 	call ReloadPalettes
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	farcall SaveMenu_CopyTilemapAtOnce
-ELIF DEF(_09_29)
-	call CGBOnly_CopyTilemapAtOnce
-ENDC
 	scf
 	ret
 
@@ -43,7 +35,7 @@ ENDC
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	farcall BackupMysteryGift
 ENDC
 	farcall SaveRTC
@@ -119,7 +111,7 @@ ENDC
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	farcall BackupMysteryGift
 ENDC
 	farcall SaveRTC
@@ -213,9 +205,7 @@ AskOverwriteSaveFile:
 	ret
 
 SaveTheGame_yesorno:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld b, BANK(WouldYouLikeToSaveTheGameText)
-ENDC
 	call MapTextbox
 	call LoadMenuTextbox
 	lb bc, 0, 7
@@ -309,7 +299,7 @@ ENDC
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	farcall BackupMysteryGift
 ENDC
 	farcall SaveRTC
@@ -458,7 +448,7 @@ SaveBackupPokemonData:
 	ret
 
 SaveBackupChecksum:
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	ld hl, sBrokenBackupGameData
 	ld bc, sBrokenBackupGameDataEnd - sBrokenBackupGameData
 	ld a, BANK(sBrokenBackupGameData)
@@ -546,7 +536,7 @@ TryLoadSaveData:
 	and a
 	jr z, .corrupt
 
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	ld a, BANK(sBrokenBackupPlayerData)
 	call OpenSRAM
 	ld hl, sBrokenBackupPlayerData + wStartDay - wPlayerData

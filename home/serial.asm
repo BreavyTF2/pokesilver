@@ -36,12 +36,10 @@ Serial::
 
 .establish_connection
 	ldh a, [rSB]
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp USING_EXTERNAL_CLOCK
 	jr z, .player1
 	cp USING_INTERNAL_CLOCK
 	jr nz, .player2
-ENDC
 
 .player1
 	ldh [hSerialReceive], a
@@ -278,12 +276,10 @@ Serial_PlaceWaitingTextAndSyncAndExchangeNybble::
 	call WaitLinkTransfer
 	jp SafeLoadTempTilemapToTilemap
 
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 Serial_SyncAndExchangeNybble:: ; unreferenced
 	call LoadTilemapToTempTilemap
 	callfar PlaceWaitingText
 	jp WaitLinkTransfer ; pointless
-ENDC
 
 WaitLinkTransfer::
 	ld a, $ff
@@ -335,7 +331,6 @@ LinkTransfer::
 	push bc
 	ld b, SERIAL_TIMECAPSULE
 	ld a, [wLinkMode]
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp LINK_TIMECAPSULE
 	jr z, .got_high_nybble
 	ld b, SERIAL_TIMECAPSULE
@@ -344,11 +339,6 @@ IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ld b, SERIAL_TRADECENTER
 	jr z, .got_high_nybble
 	ld b, SERIAL_BATTLE
-ELIF DEF(_09_29)
-	cp LINK_TRADECENTER
-	jr c, .got_high_nybble
-	ld b, SERIAL_TRADECENTER
-ENDC
 .got_high_nybble
 	call .Receive
 	ld a, [wPlayerLinkAction]

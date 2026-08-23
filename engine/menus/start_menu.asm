@@ -72,7 +72,6 @@ StartMenu::
 	dw .ReturnRedraw
 
 .Exit:
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	ldh a, [hOAMUpdate]
 	push af
 	ld a, 1
@@ -80,9 +79,6 @@ IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	call LoadFontsExtra
 	pop af
 	ldh [hOAMUpdate], a
-ELSE
-	call LoadFontsExtra
-ENDC
 .ReturnEnd:
 	call ExitMenu
 .ReturnEnd2:

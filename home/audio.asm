@@ -398,10 +398,8 @@ SpecialMapMusic::
 	ld a, [wPlayerState]
 	cp PLAYER_SURF
 	jr z, .surf
-IF DEF(_09_30) || DEF(_10_06) || DEF(_REV0)
 	cp PLAYER_SURF_PIKA
 	jr z, .surf
-ENDC
 	ld a, [wStatusFlags2]
 	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, a
 	jr nz, .contest

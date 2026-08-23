@@ -58,7 +58,7 @@ ItemEffects:
 	dw SuperRepelEffect    ; SUPER_REPEL
 	dw MaxRepelEffect      ; MAX_REPEL
 	dw DireHitEffect       ; DIRE_HIT
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	dw BitterBerryEffect   ; ITEM_2D
 ELIF DEF(_REV0)
 	dw NoEffect            ; ITEM_2D
@@ -618,7 +618,7 @@ PokeBallEffect:
 
 	ld a, [sBoxCount]
 	cp MONS_PER_BOX
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	call CloseSRAM
 ENDC
 	jr nz, .BoxNotFullYet
@@ -1606,7 +1606,7 @@ BitterBerryEffect:
 
 	ld hl, ConfusedNoMoreText
 	call StdBattleTextbox
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	call UseDisposableItem
 ENDC
 

@@ -1227,7 +1227,7 @@ Script_MightyWhirlpool:
 	jumptext .MayPassWhirlpoolText
 
 .MayPassWhirlpoolText:
-IF DEF(_09_29) || DEF(_09_30) || DEF(_10_06)
+IF DEF(_09_30) || DEF(_10_06)
 	text "はげしくうみが"
 	line "うずまいている！"
 ELIF DEF(_REV0)
