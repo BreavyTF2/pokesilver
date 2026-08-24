@@ -9,6 +9,7 @@ rom_obj := \
 	garbage.o \
 	home.o \
 	main.o \
+	overdump.o \
 	ram.o \
 	data/maps/map_data.o \
 	data/pokemon/egg_moves.o \

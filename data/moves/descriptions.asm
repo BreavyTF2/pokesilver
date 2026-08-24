@@ -518,7 +518,11 @@ PsybeamDescription:
 	next "てき<WO>こんらんさせることがある@"
 
 BubblebeamDescription:
+IF DEF(_09_30)
+	db   "みず<WO>いきおいよく　はっしゃする"
+ELIF DEF(_10_06) || DEF(_REV0)
 	db   "あわ<WO>いきおいよく　はっしゃする"
+ENDC
 	next "てき<NO>すばやさ<WO>さげることがある@"
 
 AuroraBeamDescription:
@@ -530,7 +534,11 @@ HyperBeamDescription:
 	next "つぎのターン　うごけなくな<TTE>しまう@"
 
 PeckDescription:
+IF DEF(_09_30)
+	db   "ながい　くちばし<WO>つか<TTE>"
+ELIF DEF(_10_06) || DEF(_REV0)
 	db   "くちばしなど<WO>つか<TTE>"
+ENDC
 	next "てき<WO>つついて　<KOUGEKI>@"
 
 DrillPeckDescription:
@@ -854,7 +862,11 @@ ELIF DEF(_REV0)
 ENDC
 
 DreamEaterDescription:
+IF DEF(_09_30)
+	db   "てき<NI>あたえた　ダメージの"
+ELIF DEF(_10_06) || DEF(_REV0)
 	db   "ねているてき<NI>あたえた　ダメージの"
+ENDC
 	next "はんぶん　たいりょく<WO>かいふくする@"
 
 PoisonGasDescription:
@@ -1153,7 +1165,11 @@ FuryCutterDescription:
 	next "いりょく<GA>ぞうだいしていく@"
 
 SteelWingDescription:
+IF DEF(_09_30)
+	db   "つばさ<WO>おおきく　ひろげて"
+ELIF DEF(_10_06) || DEF(_REV0)
 	db   "かたいつばさ<WO>おおきく　ひろげて"
+ENDC
 	next "そのまま　てき<NI>たいあたりする@"
 
 MeanLookDescription:
@@ -1173,7 +1189,11 @@ HealBellDescription:
 	next "すべて<NO>じょうたい<WO>かいふくする@"
 
 ReturnDescription:
+IF DEF(_09_30)
+	db   "よくしてくれる　かいぬし<NO>ために"
+ELIF DEF(_10_06) || DEF(_REV0)
 	db   "よくしてくれる　トレーナー<NO>ために"
+ENDC
 	next "ぜんりょくで　てき<WO><KOUGEKI>@"
 
 PresentDescription:
@@ -1221,8 +1241,13 @@ EncoreDescription:
 	next "２ー６かい　れんぞくで　ださせる@"
 
 PursuitDescription:
+IF DEF(_09_30)
+	db   "てき<GA>にげるとき<NI>つかうと"
+	next "だいダメージ<WO>あたえることができる@"
+ELIF DEF(_10_06) || DEF(_REV0)
 	db   "あいて<GA>こうかんするときに"
 	next "つかうと　だいダメージ<WO>あたえる@"
+ENDC
 
 RapidSpinDescription:
 	db   "からだ<WO>はやく　かいてんさせて"
@@ -1301,8 +1326,11 @@ ShadowBallDescription:
 	next "とくしゅぼうぎょ<WO>さげることがある@"
 
 FutureSightDescription:
+IF DEF(_10_06) || DEF(_REV0)
 	db   "せいしんりょく<WO>たかめて"
-	next "２ターンご<NI>てき<WO><KOUGEKI>する@"
+	next ""
+ENDC
+	db   "２ターンご<NI>てき<WO><KOUGEKI>する@"
 
 RockSmashDescription:
 	db   "いわ<WO>くだく　いきおいで　<KOUGEKI>"

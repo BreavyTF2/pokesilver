@@ -1046,6 +1046,8 @@ BattleCommand_DoTurn:
 
 .out_of_pp
 	call BattleCommand_MoveDelay
+
+IF DEF(_10_06) || DEF(_REV0)
 ; 'has no pp left for [move]'
 	ld hl, HasNoPPLeftText
 ; get move effect
@@ -1066,6 +1068,7 @@ BattleCommand_DoTurn:
 
 	cp EFFECT_FLY
 	jr z, .print
+ENDC
 
 IF DEF(_REV0)
 	cp EFFECT_ROLLOUT
@@ -3581,7 +3584,9 @@ BattleCommand_SleepTarget:
 	call CheckSubstituteOpp
 	jr nz, .fail
 
+IF DEF(_10_06) || DEF(_REV0)
 	call AnimateCurrentMove
+ENDC
 
 .random_loop
 	call BattleRandom
@@ -3592,6 +3597,9 @@ BattleCommand_SleepTarget:
 	inc a
 	ld [de], a
 	call UpdateOpponentInParty
+IF DEF(_09_30)
+	call AnimateCurrentMove
+ENDC
 	call RefreshBattleHuds
 
 	ld hl, FellAsleepText
@@ -3719,6 +3727,9 @@ BattleCommand_Poison:
 	ld a, [wAttackMissed]
 	and a
 	jr nz, .failed
+IF DEF(_09_30)
+	call PoisonOpponent
+ENDC
 	call .check_toxic
 	jr z, .toxic
 
@@ -3746,7 +3757,9 @@ BattleCommand_Poison:
 
 .apply_poison
 	call AnimateCurrentMove
+IF DEF(_10_06) || DEF(_REV0)
 	call PoisonOpponent
+ENDC
 	jp RefreshBattleHuds
 
 .check_toxic
@@ -4407,10 +4420,12 @@ CheckMist:
 	jr c, .dont_check_mist
 	cp EFFECT_EVASION_DOWN_2 + 1
 	jr c, .check_mist
+IF DEF(_10_06) || DEF(_REV0)
 	cp EFFECT_ATTACK_DOWN_HIT
 	jr c, .dont_check_mist
 	cp EFFECT_EVASION_DOWN_HIT + 1
 	jr c, .check_mist
+ENDC
 .dont_check_mist
 	xor a
 	ret
@@ -5703,8 +5718,10 @@ BattleCommand_ConfuseTarget:
 	ret nz
 	call SafeCheckSafeguard
 	ret nz
+IF DEF(_10_06) || DEF(_REV0)
 	call CheckSubstituteOpp
 	ret nz
+ENDC
 	ld a, BATTLE_VARS_SUBSTATUS3_OPP
 	call GetBattleVarAddr
 	bit SUBSTATUS_CONFUSED, [hl]
@@ -5840,17 +5857,26 @@ BattleCommand_Paralyze:
 	jr nz, .failed
 	call CheckSubstituteOpp
 	jr nz, .failed
+IF DEF(_10_06) || DEF(_REV0)
 	ld c, 30
 	call DelayFrames
 	call AnimateCurrentMove
 	ld a, $1
 	ldh [hBGMapMode], a
+ENDC
 	ld a, BATTLE_VARS_STATUS_OPP
 	call GetBattleVarAddr
 	set PAR, [hl]
 	call UpdateOpponentInParty
 	ld hl, ApplyPrzEffectOnSpeed
 	call CallBattleCore
+IF DEF(_09_30)
+	ld c, 30
+	call DelayFrames
+	call AnimateCurrentMove
+	ld a, $1
+	ldh [hBGMapMode], a
+ENDC
 	call UpdateBattleHuds
 	call PrintParalyze
 	ld hl, UseHeldStatusHealingItem

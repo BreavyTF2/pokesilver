@@ -1730,9 +1730,16 @@ GivePoke::
 	ld hl, wPartyMon1ID
 	ld bc, PARTYMON_STRUCT_LENGTH
 	call AddNTimes
+IF DEF(_09_30)
+	call Random
+	ld [hli], a
+	call Random
+	ld [hl], a
+ELIF DEF(_10_06) || DEF(_REV0)
 	ld a, HIGH(RANDY_OT_ID)
 	ld [hli], a
 	ld [hl], LOW(RANDY_OT_ID)
+ENDC
 	jr .skip_nickname
 
 .send_to_box

@@ -24,8 +24,10 @@ BattleCommand_CheckFutureSight:
 	jp SkipToBattleCommand
 
 BattleCommand_FutureSight:
+IF DEF(_10_06) || DEF(_REV0)
 	call CheckUserIsCharging
 	jr nz, .AlreadyChargingFutureSight
+ENDC
 	ld a, BATTLE_VARS_MOVE_ANIM
 	call GetBattleVar
 	ld b, a

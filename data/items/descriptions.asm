@@ -96,8 +96,13 @@ ItemDescriptions:
 	dw GrnApricornDesc
 	dw CleanseTagDesc
 	dw MysticWaterDesc
+IF DEF(_09_30)
+	dw WhtApricornDesc
+	dw TwistedSpoonDesc
+ELIF DEF(_10_06) || DEF(_REV0)
 	dw TwistedSpoonDesc
 	dw WhtApricornDesc
+ENDC
 	dw BlackbeltDesc
 	dw BlkApricornDesc
 	dw TeruSama8Desc
@@ -607,12 +612,22 @@ MysticWaterDesc:
 	db   "もたせると　みずタイプの"
 	next "わざのいりょく<GA>あがる@"
 
+IF DEF(_09_30)
+WhtApricornDesc:
+	db   "しろい　ぼんぐり@"
+
+TwistedSpoonDesc:
+	db   "もたせると　エスパータイプの"
+	next "わざのいりょく<GA>あがる@"
+
+ELIF DEF(_10_06) || DEF(_REV0)
 TwistedSpoonDesc:
 	db   "もたせると　エスパータイプの"
 	next "わざのいりょく<GA>あがる@"
 
 WhtApricornDesc:
 	db   "しろい　ぼんぐり@"
+ENDC
 
 BlackbeltDesc:
 	db   "もたせると　かくとうタイプの"
