@@ -561,7 +561,11 @@ CheckPlayerLockedIn:
 
 ParsePlayerAction:
 	call CheckPlayerLockedIn
+IF DEF(_09_30)
+	jr c, .locked_in
+ELIF DEF(_10_06) || DEF(_REV0)
 	jp c, .locked_in
+ENDC
 	ld hl, wPlayerSubStatus5
 	bit SUBSTATUS_ENCORED, [hl]
 	jr z, .not_encored
@@ -570,14 +574,23 @@ ParsePlayerAction:
 	jr .encored
 
 .not_encored
+IF DEF(_10_06) || DEF(_REV0)
 	ld a, [wBattlePlayerAction]
 	cp BATTLEPLAYERACTION_SWITCH
 	jr z, .reset_rage
 	and a
 	jr nz, .reset_bide
+ENDC
 	ld a, [wPlayerSubStatus3]
 	and 1 << SUBSTATUS_BIDE
 	jr nz, .locked_in
+IF DEF(_09_30)
+	ld a, [wBattlePlayerAction]
+	cp BATTLEPLAYERACTION_SWITCH
+	jr z, .reset_rage
+	and a
+	jr nz, .locked_in
+ENDC
 	xor a
 	ld [wMoveSelectionMenuType], a
 	assert POUND == 1
@@ -628,9 +641,11 @@ ParsePlayerAction:
 	ld [wPlayerProtectCount], a
 	jr .continue_protect
 
+IF DEF(_10_06) || DEF(_REV0)
 .reset_bide
 	ld hl, wPlayerSubStatus3
 	res SUBSTATUS_BIDE, [hl]
+ENDC
 
 .locked_in
 	xor a
