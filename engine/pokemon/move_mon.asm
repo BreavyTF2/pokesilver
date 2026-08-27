@@ -1219,7 +1219,7 @@ GiveEgg::
 	and a
 	ret
 
-RemoveMonFromPartyOrBox:
+RemoveMonFromPartyOrBox::
 	ld hl, wPartyCount
 
 	ld a, [wPokemonWithdrawDepositParameter]
@@ -1370,7 +1370,7 @@ RemoveMonFromPartyOrBox:
 .close_sram
 	jp CloseSRAM
 
-ComputeNPCTrademonStats:
+ComputeNPCTrademonStats::
 	ld a, MON_LEVEL
 	call GetPartyParamLocation
 	ld a, [hl]

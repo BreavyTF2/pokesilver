@@ -1263,7 +1263,7 @@ wcebd:: db
 
 	ds 30
 
-IF DEF(_DEBUG)
+IF DEF(_DEBUG) || DEF(_09_30)
 NEXTU
 wDebugToolgearBuffer:: ds TILEMAP_WIDTH * 2
 
@@ -2386,7 +2386,7 @@ wVariableSprites:: ds $100 - SPRITE_VARS
 wUnusedReanchorBGMapFlags:: db
 	ds 2
 wTimeOfDayPal:: db
-IF DEF(_DEBUG)
+IF DEF(_DEBUG) || DEF(_09_30)
 wd55c:: db
 	ds 3
 ELSE
