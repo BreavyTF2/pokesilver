@@ -339,6 +339,7 @@ LinkTransfer::
 	ld b, SERIAL_TRADECENTER
 	jr z, .got_high_nybble
 	ld b, SERIAL_BATTLE
+
 .got_high_nybble
 	call .Receive
 	ld a, [wPlayerLinkAction]

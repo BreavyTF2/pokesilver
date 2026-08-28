@@ -750,7 +750,7 @@ PokedexShow3:
 	ld h, [hl]
 	ld l, a
 	inc hl
-	inc hl	
+	inc hl
 	inc hl
 	push hl
 	ld de, wPokedexShowPointerBank

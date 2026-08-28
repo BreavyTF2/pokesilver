@@ -14,7 +14,6 @@ It builds the following ROMs:
 - Pocket Monsters - Gold Version (J) - Rev.0 `sha1: 8814f1039450a5d3684b1389f588ccd7ee7c3436`
 - Pocket Monsters - Silver Version (J) - Rev.0 `sha1: fa8c51059c1642faa570db56ef089f54d1d2011f`
 
-
 To set up the repository, see [INSTALL.md](INSTALL.md).
 
 ## Credits

@@ -150,7 +150,7 @@ $(foreach obj, $(filter-out $(silver_10_06_debug_excl_obj), $(pokesilver_10_06_d
 	$(eval $(call DEP,$(obj),$(obj:_silver_10_06_debug.o=.asm))))
 $(foreach obj, $(filter-out $(gold_09_30_excl_obj), $(pokegold_09_30_obj)), \
 	$(eval $(call DEP,$(obj),$(obj:_gold_09_30.o=.asm))))
-	
+
 # Dependencies for game-exclusive objects (keep _gold and _silver in asm file basenames)
 $(foreach obj, $(gold_excl_obj) $(silver_excl_obj), \
 	$(eval $(call DEP,$(obj),$(obj:.o=.asm))))

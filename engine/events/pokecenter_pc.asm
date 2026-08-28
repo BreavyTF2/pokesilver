@@ -175,12 +175,12 @@ HallOfFamePC:
 	ret
 
 IF DEF(_09_30)
-Old_OaksPC:
+Old_OaksPC: ; unreferenced
 	ld hl, .TooManyConnectionsText
 	call MenuTextboxBackup
 	and a
 	ret
-	
+
 .TooManyConnectionsText:
 	text "かいせん　が　こみあっていて"
 	line "せつぞくできません"
@@ -514,7 +514,9 @@ PlayerDepositItemMenu:
 	ret
 
 .tossable
-IF DEF(_10_06) || DEF(_REV0)
+IF DEF(_09_30)
+	call .DepositItem
+ELIF DEF(_10_06) || DEF(_REV0)
 	ld a, [wPCItemQuantityChange]
 	push af
 	ld a, [wPCItemQuantity]
@@ -524,8 +526,6 @@ IF DEF(_10_06) || DEF(_REV0)
 	ld [wPCItemQuantity], a
 	pop af
 	ld [wPCItemQuantityChange], a
-ELIF DEF(_09_30)
-	call .DepositItem
 ENDC
 	ret
 
@@ -549,7 +549,14 @@ ENDC
 	jr c, .DeclinedToDeposit
 
 .ContinueDeposit:
-IF DEF(_10_06) || DEF(_REV0)
+IF DEF(_09_30)
+	ld hl, wNumItems
+	ld a, [wCurItemQuantity]
+	call TossItem
+	ld hl, wNumPCItems
+	call ReceiveItem
+	jr nc, .NoRoomInPC
+ELIF DEF(_10_06) || DEF(_REV0)
 	ld a, [wItemQuantityChange]
 	ld [wPCItemQuantityChange], a
 	ld a, [wCurItemQuantity]
@@ -563,22 +570,11 @@ IF DEF(_10_06) || DEF(_REV0)
 	ld [wCurItemQuantity], a
 	ld hl, wNumItems
 	call TossItem
-	predef PartyMonItemName
-	ld hl, .PlayersPCDepositItemsText
-	call PrintText
-	ret
-ELIF DEF(_09_30)
-	ld hl, wNumItems
-	ld a, [wCurItemQuantity]
-	call TossItem
-	ld hl, wNumPCItems
-	call ReceiveItem
-	jr nc, .NoRoomInPC
-	predef PartyMonItemName
-	ld hl, .PlayersPCDepositItemsText
-	call PrintText
-	ret
 ENDC
+	predef PartyMonItemName
+	ld hl, .PlayersPCDepositItemsText
+	call PrintText
+	ret
 
 .NoRoomInPC:
 	ld hl, .PlayersPCNoRoomDepositText

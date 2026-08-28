@@ -925,11 +925,10 @@ ENDC
 StartTitleScreen:
 	call TitleScreen
 	call DelayFrame
-
 .loop
 	call RunTitleScreen
 	jr nc, .loop
-	
+
 	call ClearSprites
 	call ClearBGPalettes
 

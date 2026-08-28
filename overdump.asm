@@ -1,5 +1,195 @@
 IF DEF(_09_30)
 
+SECTION "Bank 00 Overdump", ROM0
+
+; partial overdump of RestartMapMusic
+	pop de
+	pop hl
+	ret
+
+Overdump_SpecialMapMusic:
+	ld a, [wPlayerState]
+	cp PLAYER_SURF
+	jr z, .surf
+	cp PLAYER_SURF_PIKA
+	jr z, .surf
+
+	ld a, [wStatusFlags2]
+	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, a
+	jr nz, .contest
+
+.no
+	and a
+	ret
+
+.bike
+	ld de, MUSIC_BICYCLE
+	scf
+	ret
+
+.surf
+	ld de, MUSIC_SURF
+	scf
+	ret
+
+.contest
+	ld a, [wMapGroup]
+	cp GROUP_ROUTE_35_NATIONAL_PARK_GATE
+	jr nz, .no
+	ld a, [wMapNumber]
+	cp MAP_ROUTE_35_NATIONAL_PARK_GATE
+	jr z, .ranking
+	cp MAP_ROUTE_36_NATIONAL_PARK_GATE
+	jr nz, .no
+
+.ranking
+	ld de, MUSIC_BUG_CATCHING_CONTEST_RANKING
+	scf
+	ret
+
+Overdump_GetMapMusic_MaybeSpecial:
+	call Overdump_SpecialMapMusic
+	ret c
+	call $2df6 ; GetMapMusic
+	ret
+
+Overdump_PlaceBCDNumberSprite:
+; Places a BCD number at the upper center of the screen.
+	ld a, 4 * TILE_WIDTH
+	ld [wShadowOAMSprite38YCoord], a
+	ld [wShadowOAMSprite39YCoord], a
+	ld a, 10 * TILE_WIDTH
+	ld [wShadowOAMSprite38XCoord], a
+	ld a, 11 * TILE_WIDTH
+	ld [wShadowOAMSprite39XCoord], a
+	xor a
+	ld [wShadowOAMSprite38Attributes], a
+	ld [wShadowOAMSprite39Attributes], a
+	ld a, [wUnusedBCDNumber]
+	cp 100
+	jr nc, .max
+	add 1
+	daa
+	ld b, a
+	swap a
+	and $f
+	add '０'
+	ld [wShadowOAMSprite38TileID], a
+	ld a, b
+	and $f
+	add '０'
+	ld [wShadowOAMSprite39TileID], a
+	ret
+
+.max
+	ld a, '９'
+	ld [wShadowOAMSprite38TileID], a
+	ld [wShadowOAMSprite39TileID], a
+	ret
+
+Overdump_CheckSFX:
+	ld a, [wChannel5Flags1]
+	bit SOUND_CHANNEL_ON, a
+	jr nz, .playing
+	ld a, [wChannel6Flags1]
+	bit SOUND_CHANNEL_ON, a
+	jr nz, .playing
+	ld a, [wChannel7Flags1]
+	bit SOUND_CHANNEL_ON, a
+	jr nz, .playing
+	ld a, [wChannel8Flags1]
+	bit SOUND_CHANNEL_ON, a
+	jr nz, .playing
+	and a
+	ret
+.playing
+	scf
+	ret
+
+Overdump_TerminateExpBarSound:
+	xor a
+	ld [wChannel5Flags1], a
+	ld [wPitchSweep], a
+	ldh [rAUD1SWEEP], a
+	ldh [rAUD1LEN], a
+	ldh [rAUD1ENV], a
+	ldh [rAUD1LOW], a
+	ldh [rAUD1HIGH], a
+	ret
+
+
+SECTION "Bank 01 Overdump", ROMX, BANK[1]
+
+; partial overdump of YoungerHaircutBrother
+	db $03
+
+Overdump_DaisysGrooming:
+	ld hl, Overdump_HappinessData_DaisysGrooming
+	; fallthrough
+
+Overdump_HaircutOrGrooming:
+	push hl
+	farcall SelectMonFromParty
+	pop hl
+	jr c, .nope
+	ld a, [wCurPartySpecies]
+	cp EGG
+	jr z, .egg
+	push hl
+	call $3ac7 ; GetCurNickname
+	call Overdump_CopyPokemonName_Buffer1_Buffer3
+	pop hl
+	call $3102 ; Random
+.loop:
+	sub [hl]
+	jr c, .ok
+	inc hl
+	inc hl
+	inc hl
+	jr .loop
+
+.ok
+	inc hl
+	ldi a, [hl]
+	ld [wScriptVar], a
+	ld c, [hl]
+	call $7d41 ; ChangeHappiness
+	ret
+
+.nope
+	xor a
+	ld [wScriptVar], a
+	ret
+
+.egg
+	ld a, 1
+	ld [wScriptVar], a
+	ret
+
+Overdump_HappinessData_OlderHaircutBrother:
+	db 30 percent,     2, HAPPINESS_OLDERCUT1
+	db 50 percent + 1, 3, HAPPINESS_OLDERCUT2
+	db -1,             4, HAPPINESS_OLDERCUT3
+
+Overdump_HappinessData_YoungerHaircutBrother:
+	db 60 percent + 1, 2, HAPPINESS_YOUNGCUT1
+	db 30 percent,     3, HAPPINESS_YOUNGCUT2
+	db -1,             4, HAPPINESS_YOUNGCUT3
+
+Overdump_HappinessData_DaisysGrooming:
+	db -1,             2, HAPPINESS_GROOMING
+
+Overdump_CopyPokemonName_Buffer1_Buffer3:
+	ld hl, wStringBuffer1
+	ld de, wStringBuffer3
+	ld bc, SCENE_ELMSLAB_AIDE_GIVES_POKE_BALLS
+	jp $317a ; CopyBytes
+
+; partial duplicate overdump of CopyPokemonName_Buffer1_Buffer3
+	db $0
+	jp $317a ; CopyBytes
+
+
 SECTION "Bank 03 Overdump", ROMX, BANK[3]
 
 ; partial overdump of KnowsMove.KnowsMoveText
@@ -153,7 +343,7 @@ SECTION "Bank 0b Overdump", ROMX, BANK[11]
 
 ; this section contains data from at least 2 previous builds
 
-; partial duplicate of ConvertBerriesToBerryJuice
+; partial duplicate overdump of ConvertBerriesToBerryJuice
 	ret
 
 	ld a, BERRY_JUICE
@@ -485,17 +675,14 @@ ENDM
 	db HIGH(Overdump_DoneTileAnimation)
 
 Overdump_DoneTileAnimation:
-; Reset the animation command loop.
 	xor a
 	ldh [hTileAnimFrame], a
 	jp $15e2 ; Function15ef
 
 Overdump_WaitTileAnimation:
-; Do nothing this frame.
 	ret
 
 Overdump_StandingTileFrame8:
-; Tick the wTileAnimationTimer, wrapping from 7 to 0.
 	ld a, [wTileAnimationTimer]
 	inc a
 	and %111
@@ -503,7 +690,6 @@ Overdump_StandingTileFrame8:
 	ret
 
 Overdump_ScrollTileRightLeft:
-; Scroll right for 4 ticks, then left for 4 ticks.
 	ld a, [wTileAnimationTimer]
 	inc a
 	and %111
@@ -513,7 +699,6 @@ Overdump_ScrollTileRightLeft:
 	jr Overdump_ScrollTileRight
 
 Overdump_ScrollTileUpDown:
-; Scroll up for 4 ticks, then down for 4 ticks.
 	ld a, [wTileAnimationTimer]
 	inc a
 	and %111
@@ -605,17 +790,13 @@ Overdump_ScrollTileDown:
 	ret
 
 Overdump_AnimateWaterTile:
-; Save the stack pointer in bc for WriteTile to restore
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; A cycle of 4 frames, updating every other tick
 	ld a, [wTileAnimationTimer]
 	and %110
 
-; hl = .WaterTileFrames + a * 8
-; (a was pre-multiplied by 2 from 'and %110')
 	add a
 	add a
 	add a
@@ -625,7 +806,6 @@ Overdump_AnimateWaterTile:
 	adc HIGH(.WaterTileFrames)
 	ld h, a
 
-; Write the tile graphic from hl (now sp) to de (now hl)
 	ld sp, hl
 	ld l, e
 	ld h, d
@@ -635,29 +815,24 @@ Overdump_AnimateWaterTile:
 	INCBIN "gfx/tilesets/water/water.2bpp"
 
 Overdump_AnimateFlowerTile:
-; Save the stack pointer in bc for WriteTile to restore
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; A cycle of 2 frames, updating every other tick
 	ld a, [wTileAnimationTimer]
 	and %10
 
-; CGB has different tile graphics for flowers
 	ld e, a
 	ldh a, [hCGB]
 	and 1
 	add e
 
-; hl = .FlowerTileFrames + a * 16
 	swap a
 	ld e, a
 	ld d, 0
 	ld hl, .FlowerTileFrames
 	add hl, de
 
-; Write the tile graphic from hl (now sp) to tile $03 (now hl)
 	ld sp, hl
 	ld hl, vTiles2 tile $03
 	jp Overdump_WriteTile
@@ -669,45 +844,37 @@ Overdump_AnimateFlowerTile:
 	INCBIN "gfx/tilesets/flower/cgb_2.2bpp"
 
 Overdump_AnimateLavaBubbleTile1:
-; Save the stack pointer in bc for WriteTile to restore
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; A cycle of 4 frames, updating every other tick
 	ld a, [wTileAnimationTimer]
 	and %110
 
-; Offset by 2 frames from AnimateLavaBubbleTile2
 	srl a
 	inc a
 	inc a
 	and %011
 
-; hl = LavaBubbleTileFrames + a * 16
 	swap a
 	ld e, a
 	ld d, 0
 	ld hl, Overdump_LavaBubbleTileFrames
 	add hl, de
 
-; Write the tile graphic from hl (now sp) to tile $5b (now hl)
 	ld sp, hl
 	ld hl, vTiles2 tile $5b
 	jp Overdump_WriteTile
 
 Overdump_AnimateLavaBubbleTile2:
-; Save the stack pointer in bc for WriteTile to restore
+
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; A cycle of 4 frames, updating every other tick
 	ld a, [wTileAnimationTimer]
 	and %110
 
-; hl = LavaBubbleTileFrames + a * 8
-; (a was pre-multiplied by 2 from 'and %110')
 	add a
 	add a
 	add a
@@ -716,7 +883,6 @@ Overdump_AnimateLavaBubbleTile2:
 	ld hl, Overdump_LavaBubbleTileFrames
 	add hl, de
 
-; Write the tile graphic from hl (now sp) to tile $38 (now hl)
 	ld sp, hl
 	ld hl, vTiles2 tile $38
 	jp Overdump_WriteTile
@@ -728,18 +894,13 @@ Overdump_LavaBubbleTileFrames:
 	INCBIN "gfx/tilesets/lava/4.2bpp"
 
 Overdump_AnimateTowerPillarTile:
-; Input de points to the destination in VRAM, then the source tile frames
-
-; Save the stack pointer in bc for WriteTile to restore
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; A cycle of 8 frames, updating every tick
 	ld a, [wTileAnimationTimer]
 	and %111
 
-; a = [.TowerPillarTileFrameOffsets + a]
 	ld hl, .TowerPillarTileFrameOffsets
 	add l
 	ld l, a
@@ -748,7 +909,6 @@ Overdump_AnimateTowerPillarTile:
 	ld h, a
 	ld a, [hl]
 
-; de = the destination in VRAM
 	ld l, e
 	ld h, d
 	ld e, [hl]
@@ -756,7 +916,6 @@ Overdump_AnimateTowerPillarTile:
 	ld d, [hl]
 	inc hl
 
-; hl = the source tile frames + offset a
 	add [hl]
 	inc hl
 	ld h, [hl]
@@ -765,7 +924,6 @@ Overdump_AnimateTowerPillarTile:
 	adc h
 	ld h, a
 
-; Write the tile graphic from hl (now sp) to de (now hl)
 	ld sp, hl
 	ld l, e
 	ld h, d
@@ -782,20 +940,15 @@ Overdump_AnimateTowerPillarTile:
 	db 1 tiles
 
 Overdump_StandingTileFrame:
-; Tick the wTileAnimationTimer.
 	ld hl, wTileAnimationTimer
 	inc [hl]
 	ret
 
 Overdump_AnimateWhirlpoolTile:
-; Input de points to the destination in VRAM, then the source tile frames
-
-; Save the stack pointer in bc for WriteTile to restore
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; de = the destination in VRAM
 	ld l, e
 	ld h, d
 	ld e, [hl]
@@ -803,11 +956,9 @@ Overdump_AnimateWhirlpoolTile:
 	ld d, [hl]
 	inc hl
 
-; A cycle of 4 frames, updating every tick
 	ld a, [wTileAnimationTimer]
 	and %11
 
-; hl = the source tile frames + a * 16
 	swap a
 	add [hl]
 	inc hl
@@ -817,19 +968,16 @@ Overdump_AnimateWhirlpoolTile:
 	adc h
 	ld h, a
 
-; Write the tile graphic from hl (now sp) to de (now hl)
 	ld sp, hl
 	ld l, e
 	ld h, d
 	jr Overdump_WriteTile
 
 Overdump_WriteTileFromAnimBuffer:
-; Save the stack pointer in bc for WriteTile to restore
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; Write the tile graphic from wTileAnimBuffer (now sp) to de (now hl)
 	ld hl, wTileAnimBuffer
 	ld sp, hl
 	ld h, d
@@ -837,12 +985,10 @@ Overdump_WriteTileFromAnimBuffer:
 	jr Overdump_WriteTile
 
 Overdump_ReadTileToAnimBuffer:
-; Save the stack pointer in bc for WriteTile to restore
 	ld hl, sp+0
 	ld b, h
 	ld c, l
 
-; Write the tile graphic from de (now sp) to wTileAnimBuffer (now hl)
 	ld h, d
 	ld l, e
 	ld sp, hl
@@ -850,13 +996,6 @@ Overdump_ReadTileToAnimBuffer:
 	; fallthrough
 
 Overdump_WriteTile:
-; Write one tile from sp to hl.
-; The stack pointer has been saved in bc.
-
-; This function cannot be called, only jumped to,
-; because it relocates the stack pointer to quickly
-; copy data with a "pop slide".
-
 	pop de
 	ld [hl], e
 	inc hl
@@ -869,43 +1008,33 @@ rept (TILE_SIZE - 2) / 2
 	ld [hl], d
 endr
 
-; Restore the stack pointer from bc
 	ld h, b
 	ld l, c
 	ld sp, hl
 	ret
 
 Overdump_AnimateWaterPalette:
-; Transition between color values 0-2 for color 0 in palette 3.
-
-; Don't update the palette on DMG
 	ldh a, [hCGB]
 	and a
 	ret z
 
-; Don't update a non-standard palette order
 	ldh a, [rBGP]
 	cp %11100100
 	ret nz
 
-; Only update on even ticks
 	ld a, [wTileAnimationTimer]
 	ld l, a
-	and 1 ; odd
+	and 1
 	ret nz
 
-; Ready for BGPD input
 	ld a, BGPI_AUTOINC palette PAL_BG_WATER color 0
 	ldh [rBGPI], a
 
-; A cycle of 4 colors (0 1 2 1), updating every other tick
 	ld a, l
 	and %110
 	jr z, .color0
 	cp %100
 	jr z, .color2
-
-; Copy one color from hl to rBGPI via rBGPD
 
 ; color1
 	ld hl, wBGPals1 palette PAL_BG_WATER color 1
@@ -932,31 +1061,24 @@ Overdump_AnimateWaterPalette:
 	ret
 
 Overdump_FlickeringCaveEntrancePalette:
-; Don't update the palette on DMG
 	ldh a, [hCGB]
 	and a
 	ret z
 
-; Don't update a non-standard palette order
 	ldh a, [rBGP]
 	cp %11100100
 	ret nz
 
-; We only want to be here if we're in a dark cave.
 	ld a, [wTimeOfDayPalset]
 	cp DARKNESS_PALSET
 	ret nz
 
-; Ready for BGPD input
 	ld a, BGPI_AUTOINC palette PAL_BG_YELLOW color 0
 	ldh [rBGPI], a
 
-; A cycle of 2 colors (0 2), updating every other vblank
 	ldh a, [hVBlankCounter]
 	and %10
 	jr nz, .color1
-
-; Copy one color from hl to rBGPI via rBGPD
 
 ; color0
 	ld hl, wBGPals1 palette PAL_BG_YELLOW color 0
@@ -1019,7 +1141,6 @@ pushc toolgear
 	bit 0, [hl]
 	jr z, .Clock
 
-; coordinates
 	ld hl, wXCoord
 	debgcoord 4, 1, wDebugToolgearBuffer
 	ld c, 1
@@ -1043,7 +1164,6 @@ pushc toolgear
 	call .PrintNum
 	ld a, '：'
 	ldbgcoord_a 7, 1, wDebugToolgearBuffer
-	; bug: should colon coordinates be (7, 1) and (10, 1)?
 
 	ld hl, hMinutes
 	debgcoord 8, 1, wDebugToolgearBuffer
@@ -1062,7 +1182,6 @@ pushc toolgear
 	inc a ; '☎'
 	ldbgcoord_a 17, 1, wDebugToolgearBuffer
 
-	; leftover code from SW97, which had a blinking colon
 	ldh a, [hSeconds]
 	and 1
 	ret z
@@ -1120,7 +1239,6 @@ Overdump_NPCTrade::
 	ld a, TRADE_DIALOG_CANCEL
 	jr c, .done
 
-; Select givemon from party
 	ld b, PARTYMENUACTION_GIVE_MON
 	farcall SelectTradeOrDayCareMon
 	ld a, TRADE_DIALOG_CANCEL
@@ -1162,7 +1280,6 @@ Overdump_NPCTrade::
 	call $2ff3 ; DisableSpriteUpdates
 	ld a, [wJumptableIndex]
 	push af
-	; wTradeDialog aliases wFrameCounter, which TradeAnimation uses
 	ld a, [wTradeDialog]
 	push af
 	predef_overdump TradeAnimation
@@ -1180,11 +1297,11 @@ Overdump_CheckTradeGender:
 	ld e, NPCTRADE_GENDER
 	call Overdump_GetTradeAttr
 	ld a, [hl]
-	and a ; TRADE_GENDER_EITHER
+	and a
 	jr z, .matching
 	cp TRADE_GENDER_MALE
 	jr z, .check_male
-	; TRADE_GENDER_FEMALE
+
 	ld a, BANK(GetGender)
 	ld hl, $52eb ; GetGender
 	rst FarCall
@@ -1272,8 +1389,8 @@ Overdump_DoNPCTrade:
 	ld a, [wOTTrademonSpecies]
 	ld [wCurPartySpecies], a
 	xor a
-	ld [wMonType], a ; PARTYMON
-	ld [wPokemonWithdrawDepositParameter], a ; REMOVE_PARTY
+	ld [wMonType], a
+	ld [wPokemonWithdrawDepositParameter], a
 	ld hl, $62cf ; RemoveMonFromPartyOrBox
 	ld a, BANK(RemoveMonFromPartyOrBox)
 	rst FarCall
@@ -1456,12 +1573,11 @@ Overdump_GetTradeMonNames:
 	call Overdump_GetTradeAttr
 	ld a, [hl]
 	pop hl
-	and a ; TRADE_GENDER_EITHER
+	and a
 	ret z
 	cp TRADE_GENDER_MALE
 	ld a, '♂'
 	jr z, .done
-	; TRADE_GENDER_FEMALE
 	ld a, '♀'
 .done
 	ld [hli], a
@@ -1469,7 +1585,6 @@ Overdump_GetTradeMonNames:
 	ret
 
 MACRO npctrade
-; dialog set, requested mon, offered mon, nickname, dvs, item, OT ID, OT name, gender requested
 	db \1, \2, \3
 	dname \4, NAME_LENGTH - 2
 	db \5, \6, \7
@@ -1479,15 +1594,12 @@ MACRO npctrade
 ENDM
 
 Overdump_NPCTrades:
-; entries correspond to NPCTRADE_* constants
-	table_width NPCTRADE_STRUCT_LENGTH
 	npctrade TRADE_DIALOGSET_COLLECTOR, DROWZEE,    MACHOP,     "きんにく", $37, $66, GOLD_BERRY,   37460, "ナオキ", TRADE_GENDER_EITHER
 	npctrade TRADE_DIALOGSET_COLLECTOR, BELLSPROUT, ONIX,       "ブルブル", $96, $66, BITTER_BERRY, 48926, "コンタ", TRADE_GENDER_EITHER
 	npctrade TRADE_DIALOGSET_HAPPY,     KRABBY,     VOLTORB,    "ビリー",   $98, $88, PRZCUREBERRY, 29189,  "ゲン", TRADE_GENDER_EITHER
 	npctrade TRADE_DIALOGSET_NEWBIE,    DRAGONAIR,  RHYDON,     "ドンドコ",  $77, $66, BITTER_BERRY, 00283, "ミサコ", TRADE_GENDER_FEMALE
 	npctrade TRADE_DIALOGSET_HAPPY,     KADABRA,    RAPIDASH,   "カケアシ", $96, $66, BURNT_BERRY,  15616, "デンジ", TRADE_GENDER_EITHER
 	npctrade TRADE_DIALOGSET_NEWBIE,    CHANSEY,    AERODACTYL, "プッチー",  $96, $66, GOLD_BERRY,   26491, "キヨミ", TRADE_GENDER_EITHER
-	assert_table_length NUM_NPC_TRADES
 
 Overdump_PrintTradeText:
 	push af
@@ -1510,29 +1622,25 @@ endr
 	ret
 
 Overdump_TradeTexts:
-; entries correspond to TRADE_DIALOG_* × TRADE_DIALOGSET_* constants
-	table_width 2
-; TRADE_DIALOG_INTRO
 	dw Overdump_NPCTradeIntroText1
 	dw Overdump_NPCTradeIntroText2
 	dw Overdump_NPCTradeIntroText3
-; TRADE_DIALOG_CANCEL
+
 	dw Overdump_NPCTradeCancelText1
 	dw Overdump_NPCTradeCancelText2
 	dw Overdump_NPCTradeCancelText3
-; TRADE_DIALOG_WRONG
+
 	dw Overdump_NPCTradeWrongText1
 	dw Overdump_NPCTradeWrongText2
 	dw Overdump_NPCTradeWrongText3
-; TRADE_DIALOG_COMPLETE
+
 	dw Overdump_NPCTradeCompleteText1
 	dw Overdump_NPCTradeCompleteText2
 	dw Overdump_NPCTradeCompleteText3
-; TRADE_DIALOG_AFTER
+
 	dw Overdump_NPCTradeAfterText1
 	dw Overdump_NPCTradeAfterText2
 	dw Overdump_NPCTradeAfterText3
-	assert_table_length NUM_TRADE_DIALOGS * NUM_TRADE_DIALOGSETS
 
 Overdump_NPCTradeCableText:
 	text "じゃあ"
@@ -1540,7 +1648,6 @@ Overdump_NPCTradeCableText:
 	prompt
 
 Overdump_TradedForText:
-	; traded givemon for getmon
 	text "<PLAYER>は　@"
 	text_ram wMonOrItemNameBuffer
 	text "と"
@@ -1684,7 +1791,6 @@ Overdump_NPCTradeAfterText3:
 	text "は　すっごく　かわいいわ！"
 	done
 
-; Constants for momitem offsets (see data/items/mom_phone.asm)
 rsreset
 DEF MOMITEM_TRIGGER rb 3 ; 0
 DEF MOMITEM_COST    rb 3 ; 3
@@ -1692,7 +1798,6 @@ DEF MOMITEM_KIND    rb   ; 6
 DEF MOMITEM_ITEM    rb   ; 7
 DEF MOMITEM_SIZE EQU _RS ; 8
 
-; momitem kind values
 	const_def 1
 	const MOM_ITEM
 	const MOM_DOLL
@@ -1895,14 +2000,13 @@ Overdump_GetItemFromMom:
 	ld l, a
 	ld h, 0
 	assert MOMITEM_SIZE == 8
-rept 3 ; multiply hl by MOMITEM_SIZE
+rept 3
 	add hl, hl
 endr
 	add hl, de
 	ret
 
 MACRO momitem
-; money to trigger, cost, kind, item
 	bigdt \1, \2
 	db \3, \4
 ENDM
@@ -1928,7 +2032,7 @@ Overdump_MomItems_2:
 	momitem 100000, 22800, MOM_DOLL, DECO_BIG_SNORLAX_DOLL
 .End
 
-	bigdt 0 ; unused
+	bigdt 0
 
 Overdump_MomHiHowAreYouText:
 	text "もしもし"
@@ -1963,9 +2067,6 @@ Overdump_MomItsInYourRoomText:
 	done
 
 Overdump_StagePartyDataForMysteryGift:
-; You will be sending this data to your mystery gift partner.
-; Structure is the same as a trainer with species and moves
-; defined.
 	ld a, BANK(sPokemonData)
 	call $3141 ; OpenSRAM
 	ld de, wMysteryGiftStaging
@@ -1978,19 +2079,19 @@ Overdump_StagePartyDataForMysteryGift:
 	cp EGG
 	jr z, .next
 	push hl
-	; copy level
+
 	ld hl, MON_LEVEL
 	add hl, bc
 	ld a, [hl]
 	ld [de], a
 	inc de
-	; copy species
+
 	ld hl, MON_SPECIES
 	add hl, bc
 	ld a, [hl]
 	ld [de], a
 	inc de
-	; copy moves
+
 	ld hl, MON_MOVES
 	add hl, bc
 	push bc
@@ -2153,7 +2254,6 @@ Overdump_InitMysteryGiftLayout:
 Overdump_MysteryGiftGFX:
 INCBIN "gfx/mystery_gift/mystery_gift.2bpp"
 
-	; DebugColor_GFX tile IDs
 	const_def $6a
 	const DEBUGTEST_TICKS_1 ; $6a
 	const DEBUGTEST_TICKS_2 ; $6b
@@ -2178,7 +2278,6 @@ INCBIN "gfx/mystery_gift/mystery_gift.2bpp"
 	const DEBUGTEST_E       ; $7e
 	const DEBUGTEST_F       ; $7f
 
-	; DebugColorMain.Jumptable indexes
 	const_def
 	const DEBUGCOLORMAIN_INITSCREEN     ; 0
 	const DEBUGCOLORMAIN_UPDATESCREEN   ; 1
@@ -2188,7 +2287,6 @@ INCBIN "gfx/mystery_gift/mystery_gift.2bpp"
 	const DEBUGCOLORMAIN_TMHMJOYPAD     ; 5
 
 Overdump_DebugColorPicker:
-; A debug menu to test monster and trainer palettes at runtime.
 	ldh a, [hCGB]
 	and a
 	jr nz, .cgb
@@ -2211,7 +2309,7 @@ Overdump_DebugColorPicker:
 	ld de, MUSIC_NONE
 	call $3d5d ; PlayMusic
 
-	xor a ; DEBUGCOLORMAIN_INITSCREEN
+	xor a
 	ld [wJumptableIndex], a
 	ld [wDebugColorCurMon], a
 	ld [wDebugColorIsShiny], a
@@ -2320,7 +2418,6 @@ Overdump_DebugColor_LoadGFX:
 	ld bc, 1 tiles
 	call $317a ; CopyBytes
 
-; Invert the font colors.
 	call LoadStandardFont
 	ld hl, vTiles1
 	ld bc, $80 tiles
@@ -2423,19 +2520,17 @@ Overdump_DebugColorMain:
 	ret
 
 .SetMaxNum:
-; Looping back around the pic set.
 	ld a, [wDebugColorIsTrainer]
 	and a
 	jr nz, .trainer
 ; mon
-	ld a, NUM_POKEMON ; CELEBI
+	ld a, NUM_POKEMON
 	ret
 .trainer
-	ld a, NUM_TRAINER_CLASSES ; GRUNTF
+	ld a, NUM_TRAINER_CLASSES
 	ret
 
 .Jumptable:
-; entries correspond to DEBUGCOLORMAIN_* constants
 	dw Overdump_DebugColor_InitScreen
 	dw Overdump_DebugColor_UpdateScreen
 	dw Overdump_DebugColor_UpdatePalettes
@@ -2534,13 +2629,13 @@ Overdump_DebugColor_InitScreen:
 	ret
 
 .ShinyText:
-	db "レア", DEBUGTEST_BLACK, DEBUGTEST_BLACK, "@" ; Rare (shiny)
+	db "レア", DEBUGTEST_BLACK, DEBUGTEST_BLACK, "@"
 
 .NormalText:
-	db "ノーマル@" ; Normal
+	db "ノーマル@"
 
 .SwitchText:
-	db DEBUGTEST_A, "きりかえ▶@" ; (A) Switches
+	db DEBUGTEST_A, "きりかえ▶@"
 
 Overdump_DebugColor_LoadRGBMeter:
 	decoord 0, 11, wAttrmap
@@ -2694,7 +2789,7 @@ Overdump_DebugColor_Joypad:
 	jr nz, .toggle_shiny
 
 	ld a, [wDebugColorRGBJumptableIndex]
-	maskbits 4 ; .PointerTable length
+	maskbits 4
 	ld e, a
 	ld d, 0
 	ld hl, .PointerTable
@@ -2706,13 +2801,11 @@ Overdump_DebugColor_Joypad:
 	jp hl
 
 .tmhm
-; Enter the TM/HM checker.
 	ld a, DEBUGCOLORMAIN_INITTMHM
 	ld [wJumptableIndex], a
 	ret
 
 .toggle_shiny
-; Toggle between the normal and shiny mon colors.
 	ld a, [wDebugColorIsTrainer]
 	and a
 	ret nz
@@ -2750,7 +2843,7 @@ Overdump_DebugColor_SelectColorBox:
 	ret
 
 .light
-	xor a ; FALSE
+	xor a
 	ld [wDebugColorCurColor], a
 	ld de, wDebugLightColor
 	call Overdump_DebugColor_CalculateRGB
@@ -2935,10 +3028,10 @@ Overdump_DebugColor_PrintTMHMMove:
 	ret
 
 .AbleText:
-	db "おぼえられる@" ; Learnable
+	db "おぼえられる@"
 
 .NotAbleText:
-	db "おぼえられない@" ; Not learnable
+	db "おぼえられない@"
 
 .GetNumberedTMHM:
 	cp NUM_TMS
@@ -3053,7 +3146,6 @@ endr
 	ret
 
 Overdump_DebugColor_FillBoxWithByte:
-; For some reason, we have another copy of FillBoxWithByte here
 .row
 	push bc
 	push hl
@@ -3086,7 +3178,7 @@ Overdump__DebugColor_PushSGBPals:
 	ld b, a
 .loop
 	push bc
-	xor a ; JOYP_SGB_START
+	xor a
 	ldh [rJOYP], a
 	ld a, JOYP_SGB_FINISH
 	ldh [rJOYP], a
@@ -3165,8 +3257,8 @@ Overdump_DebugColor_PlaceCursor:
 .place
 	ld [hl], '▶'
 
-	ld b, $70 ; initial tile id
-	ld c, 5 ; initial palette
+	ld b, $70
+	ld c, 5
 	ld hl, wShadowOAM
 	ld de, wDebugRedChannel
 	call .placesprite
@@ -3178,16 +3270,16 @@ Overdump_DebugColor_PlaceCursor:
 
 .placesprite:
 	ld a, b
-	ld [hli], a ; y
+	ld [hli], a
 	ld a, [de]
 	add a
 	add a
 	add 3 * TILE_WIDTH
-	ld [hli], a ; x
+	ld [hli], a
 	xor a
-	ld [hli], a ; tile id
+	ld [hli], a
 	ld a, c
-	ld [hli], a ; attributes
+	ld [hli], a
 	ld a, 2 * TILE_WIDTH
 	add b
 	ld b, a
@@ -3199,9 +3291,9 @@ Overdump_DebugColor_PlaceCursor:
 	ret
 
 Overdump_DebugColor_AreYouFinishedString:
-	db   "おわりますか？"                        ; Are you finished?
-	next "はい．．．", DEBUGTEST_A ; YES...(A)
-	next "いいえ．．", DEBUGTEST_B     ; NO..(B)
+	db   "おわりますか？"
+	next "はい．．．", DEBUGTEST_A
+	next "いいえ．．", DEBUGTEST_B
 	db   "@"
 
 Overdump_DebugColor_UpArrowGFX:
@@ -3211,7 +3303,6 @@ Overdump_DebugColor_GFX:
 INCBIN "gfx/debug/color_test.2bpp"
 
 Overdump_TilesetColorPicker:
-; A debug menu to test tileset palettes at runtime.
 	ldh a, [hCGB]
 	and a
 	ret z
@@ -3298,7 +3389,6 @@ Overdump_DebugColor_DrawAttributeSwatch:
 	; fallthrough
 
 Overdump__DebugColor_DrawSwatch:
-; Fills a 4x3 box at de with byte a.
 	add hl, de
 rept 4
 	ld [hli], a
@@ -3360,7 +3450,7 @@ Overdump_DebugColorMain2:
 	and OAM_PALETTE
 	cp PAL_BG_TEXT
 	jr nz, .palette_ok
-	xor a ; PAL_BG_GRAY
+	xor a
 .palette_ok
 	ld [hl], a
 	decoord 1, 1, 0
@@ -3425,7 +3515,7 @@ Overdump_DebugTileset_UpdatePalettes:
 
 Overdump_DebugTileset_Joypad:
 	ld a, [wDebugTilesetRGBJumptableIndex]
-	maskbits 4 ; .PointerTable length
+	maskbits 4
 	ld e, a
 	ld d, 0
 	ld hl, .PointerTable
@@ -3609,7 +3699,7 @@ Overdump_DebugTileset_PlaceCursor:
 	call $3203 ; AddNTimes
 	ld [hl], '▶'
 
-	ld b, $78 ; initial tile id
+	ld b, $78
 	ld hl, wShadowOAM
 	ld de, wDebugRedChannel
 	call .placesprite
@@ -3621,16 +3711,16 @@ Overdump_DebugTileset_PlaceCursor:
 
 .placesprite:
 	ld a, b
-	ld [hli], a ; y
+	ld [hli], a
 	ld a, [de]
 	add a
 	add a
 	add 3 * TILE_WIDTH
-	ld [hli], a ; x
+	ld [hli], a
 	ld a, 16 * TILE_WIDTH
-	ld [hli], a ; tile id
+	ld [hli], a
 	ld a, 5
-	ld [hli], a ; attributes
+	ld [hli], a
 	ld a, 2 * TILE_WIDTH
 	add b
 	ld b, a

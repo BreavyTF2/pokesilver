@@ -82,6 +82,7 @@ CopyTilemapAtOnce::
 	ldh [rVBK], a
 	hlcoord 0, 0
 	call .CopyBGMapViaStack
+
 .wait2
 	ldh a, [rLY]
 	cp $80 - 1
@@ -101,11 +102,11 @@ CopyTilemapAtOnce::
 	ldh a, [hBGMapAddress + 1]
 	ld h, a
 	ld l, 0
-
 	ld a, SCREEN_HEIGHT
 	ldh [hTilesPerCycle], a
 	ld b, STAT_BUSY
 	ld c, LOW(rSTAT)
+
 .loop
 rept SCREEN_WIDTH / 2
 	pop de

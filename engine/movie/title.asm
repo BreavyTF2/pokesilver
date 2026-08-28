@@ -21,11 +21,13 @@ TitleScreen:
 	xor a
 	call ByteFill
 	farcall ClearSpriteAnims
+
 ; Decompress title screen
 	ld hl, TitleScreenGFX1
 	ld de, vTiles2
 	ld a, BANK(TitleScreenGFX1)
 	call FarDecompress
+
 ; Decompress Ho-Oh/Lugia sprite
 	ld hl, TitleScreenGFX3
 	ld de, vTiles0
@@ -41,6 +43,7 @@ TitleScreen:
 	ld bc, 8 tiles
 	ld a, BANK(TitleScreenGFX2)
 	call FarCopyBytes
+
 	call FillTitleScreenPals
 	call LoadTitleScreenTilemap
 	ld hl, wSpriteAnimDict
@@ -50,6 +53,7 @@ TitleScreen:
 	ld hl, rLCDC
 	set B_LCDC_OBJ_SIZE, [hl]
 	call EnableLCD
+
 ; Reset timing variables
 	xor a
 	ld hl, wJumptableIndex

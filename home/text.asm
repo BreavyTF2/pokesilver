@@ -400,6 +400,7 @@ LineChar::
 
 Paragraph::
 	push de
+
 	ld a, [wLinkMode]
 	cp LINK_COLOSSEUM
 	jr z, .linkbattle

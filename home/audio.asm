@@ -400,6 +400,7 @@ SpecialMapMusic::
 	jr z, .surf
 	cp PLAYER_SURF_PIKA
 	jr z, .surf
+
 	ld a, [wStatusFlags2]
 	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, a
 	jr nz, .contest
@@ -472,6 +473,7 @@ PlaceBCDNumberSprite:: ; unreferenced
 	ld [wShadowOAMSprite38TileID], a
 	ld [wShadowOAMSprite39TileID], a
 	ret
+
 CheckSFX::
 ; Return carry if any SFX channels are active.
 	ld a, [wChannel5Flags1]
@@ -502,120 +504,3 @@ TerminateExpBarSound::
 	ldh [rAUD1LOW], a
 	ldh [rAUD1HIGH], a
 	ret
-
-IF DEF(_09_30)
-	pop de
-	pop hl
-	ret
-
-Overdump_SpecialMapMusic::
-	ld a, [wPlayerState]
-	cp PLAYER_SURF
-	jr z, .surf
-	cp PLAYER_SURF_PIKA
-	jr z, .surf
-
-	ld a, [wStatusFlags2]
-	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, a
-	jr nz, .contest
-
-.no
-	and a
-	ret
-
-.bike ; unreferenced
-	ld de, MUSIC_BICYCLE
-	scf
-	ret
-
-.surf
-	ld de, MUSIC_SURF
-	scf
-	ret
-
-.contest
-	ld a, [wMapGroup]
-	cp GROUP_ROUTE_35_NATIONAL_PARK_GATE
-	jr nz, .no
-	ld a, [wMapNumber]
-	cp MAP_ROUTE_35_NATIONAL_PARK_GATE
-	jr z, .ranking
-	cp MAP_ROUTE_36_NATIONAL_PARK_GATE
-	jr nz, .no
-
-.ranking
-	ld de, MUSIC_BUG_CATCHING_CONTEST_RANKING
-	scf
-	ret
-
-Overdump_GetMapMusic_MaybeSpecial::
-	call Overdump_SpecialMapMusic
-	ret c
-	call $2DF6
-	ret
-
-Overdump_PlaceBCDNumberSprite:: ; unreferenced
-; Places a BCD number at the upper center of the screen.
-	ld a, 4 * TILE_WIDTH
-	ld [wShadowOAMSprite38YCoord], a
-	ld [wShadowOAMSprite39YCoord], a
-	ld a, 10 * TILE_WIDTH
-	ld [wShadowOAMSprite38XCoord], a
-	ld a, 11 * TILE_WIDTH
-	ld [wShadowOAMSprite39XCoord], a
-	xor a
-	ld [wShadowOAMSprite38Attributes], a
-	ld [wShadowOAMSprite39Attributes], a
-	ld a, [wUnusedBCDNumber]
-	cp 100
-	jr nc, .max
-	add 1
-	daa
-	ld b, a
-	swap a
-	and $f
-	add '０'
-	ld [wShadowOAMSprite38TileID], a
-	ld a, b
-	and $f
-	add '０'
-	ld [wShadowOAMSprite39TileID], a
-	ret
-
-.max
-	ld a, '９'
-	ld [wShadowOAMSprite38TileID], a
-	ld [wShadowOAMSprite39TileID], a
-	ret
-
-Overdump_CheckSFX::
-; Return carry if any SFX channels are active.
-	ld a, [wChannel5Flags1]
-	bit SOUND_CHANNEL_ON, a
-	jr nz, .playing
-	ld a, [wChannel6Flags1]
-	bit SOUND_CHANNEL_ON, a
-	jr nz, .playing
-	ld a, [wChannel7Flags1]
-	bit SOUND_CHANNEL_ON, a
-	jr nz, .playing
-	ld a, [wChannel8Flags1]
-	bit SOUND_CHANNEL_ON, a
-	jr nz, .playing
-	and a
-	ret
-.playing
-	scf
-	ret
-
-Overdump_TerminateExpBarSound::
-	xor a
-	ld [wChannel5Flags1], a
-	ld [wPitchSweep], a
-	ldh [rAUD1SWEEP], a
-	ldh [rAUD1LEN], a
-	ldh [rAUD1ENV], a
-	ldh [rAUD1LOW], a
-	ldh [rAUD1HIGH], a
-	ret
-ENDC
