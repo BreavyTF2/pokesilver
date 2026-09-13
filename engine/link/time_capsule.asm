@@ -1,4 +1,5 @@
 ; These functions seem to be related to backwards compatibility
+
 ValidateOTTrademon:
 	ld a, [wCurOTTradePartyMon]
 	ld hl, wOTPartyMon1Species
